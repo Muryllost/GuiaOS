@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha Certa OS | Sistemas Livres vs Pagos</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Annyang (Comandos de Voz) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        hc: { bg: '#000000', text: '#FFFF00', link: '#00FFFF', border: '#FFFFFF' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Foco de Acessibilidade Padrão Universal */
+        :focus-visible {
+            outline: 4px solid #facc15 !important;
+            outline-offset: 4px !important;
+            border-radius: 4px;
+        }
+
+        /* Classes para Alto Contraste */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #FFFF00 !important;
+        }
+        body.high-contrast * {
+            background-color: transparent !important;
+            color: inherit !important;
+            border-color: #FFFFFF !important;
+        }
+        body.high-contrast button, body.high-contrast .card {
+            border: 2px solid #FFFFFF !important;
+        }
+        body.high-contrast a, body.high-contrast .text-blue-600 {
+            color: #00FFFF !important;
+            text-decoration: underline !important;
+        }
+
+        /* Tooltip Acessível (Dicionário Leigo) */
+        .term-tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 2px dotted #3b82f6;
+            font-weight: 600;
+        }
+        body.high-contrast .term-tooltip { border-bottom-color: #FFFF00; }
+        
+        .term-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 50;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            font-weight: 400;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+        }
+        .term-tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%; left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+        .term-tooltip:hover .tooltip-text, .term-tooltip:focus .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Transições suaves */
+        body { transition: background-color 0.3s, color 0.3s, font-size 0.3s; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans text-base antialiased" id="top">
+
+    <!-- BARRA DE ACESSIBILIDADE UNIVERSAL -->
+    <nav aria-label="Menu de Acessibilidade" class="bg-slate-900 text-white p-2 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <i data-lucide="universal-access" class="w-5 h-5 text-yellow-400" aria-hidden="true"></i>
+                <span class="font-bold text-sm hidden sm:inline">Acessibilidade</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
+                <button onclick="changeFontSize(1)" class="flex items-center gap-1 hover:text-yellow-400 p-1 rounded" aria-label="Aumentar tamanho do texto">
+                    <i data-lucide="a-large-small" class="w-4 h-4"></i> A+
+                </button>
+                <button onclick="changeFontSize(-1)" class="flex items-center gap-1 hover:text-yellow-400 p-1 rounded" aria-label="Diminuir tamanho do texto">
+                    <i data-lucide="a-large-small" class="w-4 h-4"></i> A-
+                </button>
+                <button onclick="toggleHighContrast()" class="flex items-center gap-1 hover:text-yellow-400 p-1 rounded" aria-label="Alternar modo de alto contraste para daltônicos ou baixa visão">
+                    <i data-lucide="contrast" class="w-4 h-4"></i> Contraste
+                </button>
+                <button onclick="toggleVoiceNav()" id="btn-voice-nav" class="flex items-center gap-1 hover:text-yellow-400 p-1 rounded" aria-label="Ativar navegação por comandos de voz">
+                    <i data-lucide="mic" class="w-4 h-4"></i> Voz
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- STATUS DE VOZ (Oculto por padrão) -->
+    <div id="voice-status" class="hidden fixed top-16 right-4 bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold shadow-lg z-50 flex items-center gap-2 animate-pulse" role="alert" aria-live="assertive">
+        <i data-lucide="mic" class="w-5 h-5"></i> Ouvindo... Diga "Descer tela" ou "Tabela"
+    </div>
+
+    <!-- CABEÇALHO (HERO) -->
+    <header class="bg-gradient-to-br from-blue-700 to-indigo-900 text-white py-16 px-6 text-center shadow-inner relative" role="banner">
+        <div class="max-w-4xl mx-auto">
+            <button onclick="readText('titulo-principal', 'subtitulo')" class="absolute top-4 right-4 bg-white/20 hover:bg-white/40 p-2 rounded-full transition-colors" aria-label="Ouvir introdução da página">
+                <i data-lucide="volume-2" class="w-6 h-6"></i>
+            </button>
+            <h1 id="titulo-principal" class="text-4xl sm:text-5xl font-black mb-4">Escolha Certa OS</h1>
+            <p id="subtitulo" class="text-xl sm:text-2xl font-light mb-8">O guia definitivo e acessível para entender a diferença entre Sistemas Operacionais Livres e Pagos.</p>
+            <a href="#metaphora" class="inline-flex items-center gap-2 bg-yellow-400 text-blue-900 px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-300 transition-colors shadow-lg focus:ring-4 focus:ring-white">
+                Começar a entender <i data-lucide="arrow-down" class="w-5 h-5"></i>
+            </a>
+        </div>
+    </header>
+
+    <main role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-20">
+
+        <!-- 1. A METÁFORA DA COZINHA -->
+        <section id="metaphora" class="scroll-mt-20" aria-labelledby="tit-metaphora">
+            <div class="flex items-center justify-between mb-8 border-b-2 border-slate-200 pb-4">
+                <h2 id="tit-metaphora" class="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                    <i data-lucide="chef-hat" class="w-8 h-8 text-blue-600" aria-hidden="true"></i> O que são esses sistemas?
+                </h2>
+                <button onclick="readSection('metaphora-content')" class="text-blue-600 hover:text-blue-800 bg-blue-100 p-2 rounded-full" aria-label="Ouvir explicação sobre o que são os sistemas">
+                    <i data-lucide="volume-2" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div id="metaphora-content" class="grid md:grid-cols-2 gap-8">
+                <!-- Card Pago -->
+                <article class="card bg-white p-8 rounded-2xl shadow-lg border-t-4 border-rose-500">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-rose-100 p-4 rounded-full"><i data-lucide="utensils" class="w-8 h-8 text-rose-600"></i></div>
+                        <h3 class="text-2xl font-bold text-slate-800">Sistemas Pagos / Proprietários</h3>
+                    </div>
+                    <p class="text-lg text-slate-600 mb-4">
+                        Pense num <strong>Restaurante Chique</strong>. Você paga pela refeição, senta-se na mesa e o prato chega pronto e delicioso. É fácil e confortável.
+                    </p>
+                    <p class="text-lg text-slate-600">
+                        <strong>O detalhe:</strong> A porta da cozinha está trancada. Você não pode ver a receita, não pode mudar os ingredientes e, se quiser comer de novo, tem que pagar outra vez. Isso é o <span tabindex="0" class="term-tooltip">Código Fechado<span class="tooltip-text">Software em que apenas a empresa que o criou pode ver ou modificar como ele foi programado.</span></span>.
+                    </p>
+                </article>
+
+                <!-- Card Livre -->
+                <article class="card bg-white p-8 rounded-2xl shadow-lg border-t-4 border-emerald-500">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-emerald-100 p-4 rounded-full"><i data-lucide="users" class="w-8 h-8 text-emerald-600"></i></div>
+                        <h3 class="text-2xl font-bold text-slate-800">Sistemas Livres / Código Aberto</h3>
+                    </div>
+                    <p class="text-lg text-slate-600 mb-4">
+                        Pense numa enorme <strong>Cozinha Comunitária</strong>. Os ingredientes (o sistema) são totalmente gratuitos. Você pode entrar, cozinhar, ver o livro de receitas e até criar um prato novo.
+                    </p>
+                    <p class="text-lg text-slate-600">
+                        <strong>O detalhe:</strong> Como você é o chef, vai precisar aprender a usar o fogão e as panelas. Se a comida queimar, a comunidade te ajuda a limpar, mas não há um "garçom" oficial. Isso é o <span tabindex="0" class="term-tooltip">Código Aberto (Open Source)<span class="tooltip-text">Software em que o código de programação é público. Qualquer pessoa no mundo pode ver, estudar e melhorar.</span></span>.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- 2. PERFIS (Qual escolher?) -->
+        <section id="perfis" class="scroll-mt-20 bg-slate-100 -mx-4 sm:-mx-6 px-4 sm:px-6 py-12 rounded-3xl" aria-labelledby="tit-perfis">
+            <h2 id="tit-perfis" class="text-3xl font-bold text-slate-800 mb-2 text-center">Qual o seu Perfil?</h2>
+            <p class="text-center text-slate-600 mb-10 text-lg">Descubra qual tipo de "cozinha" serve melhor para o seu dia a dia.</p>
+            
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- Estudante/Doméstico -->
+                <div class="bg-white p-6 rounded-2xl shadow border border-slate-200 text-center flex flex-col items-center">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4" alt="Ilustração de um estudante" class="w-24 h-24 rounded-full mb-4">
+                    <h3 class="text-xl font-bold mb-2">O Estudante / Usuário Doméstico</h3>
+                    <p class="text-slate-600 mb-4 flex-1">"Quero ligar o PC e usar a internet, fazer trabalhos, ver vídeos e talvez jogar um pouco, sem ter dor de cabeça."</p>
+                    <div class="w-full bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <span class="block text-sm font-bold text-slate-500 uppercase mb-2">Ideais para você:</span>
+                        <div class="flex justify-center gap-2 flex-wrap">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Windows</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Linux Mint</span>
+                            <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">ChromeOS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profissional/Empresa -->
+                <div class="bg-white p-6 rounded-2xl shadow border border-slate-200 text-center flex flex-col items-center">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka&backgroundColor=ffdfbf" alt="Ilustração de uma mulher de negócios" class="w-24 h-24 rounded-full mb-4">
+                    <h3 class="text-xl font-bold mb-2">A Empresa / O Profissional</h3>
+                    <p class="text-slate-600 mb-4 flex-1">"Preciso de segurança total, ferramentas da Adobe/Microsoft e, se algo der errado, preciso de um telefone para ligar e pedir socorro técnico."</p>
+                    <div class="w-full bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <span class="block text-sm font-bold text-slate-500 uppercase mb-2">Ideais para você:</span>
+                        <div class="flex justify-center gap-2 flex-wrap">
+                            <span class="bg-slate-200 text-slate-800 px-3 py-1 rounded-full text-sm font-semibold">macOS</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Windows</span>
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">Red Hat (RHEL)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estudante TI / Servidores -->
+                <div class="bg-white p-6 rounded-2xl shadow border border-slate-200 text-center flex flex-col items-center">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jack&backgroundColor=c0aede" alt="Ilustração de um programador" class="w-24 h-24 rounded-full mb-4">
+                    <h3 class="text-xl font-bold mb-2">O Estudante de TI / Servidores</h3>
+                    <p class="text-slate-600 mb-4 flex-1">"Quero entender como o computador funciona por dentro, programar, rodar servidores e ter total controle sem gastar nada."</p>
+                    <div class="w-full bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <span class="block text-sm font-bold text-slate-500 uppercase mb-2">Ideais para você:</span>
+                        <div class="flex justify-center gap-2 flex-wrap">
+                            <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">Ubuntu</span>
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">Debian</span>
+                            <span class="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-sm font-semibold">Arch Linux</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. TABELA COMPARATIVA (Gerada via JS para manter código limpo) -->
+        <section id="comparativo" class="scroll-mt-20" aria-labelledby="tit-comparativo">
+            <div class="flex items-center justify-between mb-8 border-b-2 border-slate-200 pb-4">
+                <h2 id="tit-comparativo" class="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                    <i data-lucide="scale" class="w-8 h-8 text-blue-600" aria-hidden="true"></i> O Grande Duelo
+                </h2>
+                <span class="text-sm text-slate-500 hidden sm:block">Role para os lados em telas pequenas <i data-lucide="arrow-right-left" class="w-4 h-4 inline"></i></span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl shadow-lg border border-slate-200">
+                <table class="w-full text-left bg-white border-collapse" aria-label="Tabela comparativa entre sistemas operacionais livres e pagos">
+                    <thead>
+                        <tr class="bg-slate-800 text-white">
+                            <th class="p-4 border-b border-slate-700 min-w-[150px]" scope="col">Critério de Avaliação</th>
+                            <th class="p-4 border-b border-slate-700 bg-emerald-700/80 min-w-[250px]" scope="col">Sistemas Livres (ex: Ubuntu)</th>
+                            <th class="p-4 border-b border-slate-700 bg-rose-700/80 min-w-[250px]" scope="col">Sistemas Pagos (ex: Windows)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo">
+                        <!-- Linhas geradas por JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. QUEM É QUEM (Catálogo OS - Gerado via JS) -->
+        <section id="catalogo" class="scroll-mt-20" aria-labelledby="tit-catalogo">
+            <h2 id="tit-catalogo" class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3 border-b-2 border-slate-200 pb-4">
+                <i data-lucide="layout-grid" class="w-8 h-8 text-blue-600" aria-hidden="true"></i> Catálogo de Sistemas
+            </h2>
+            
+            <div id="cards-container" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards gerados por JavaScript -->
+            </div>
+        </section>
+
+        <!-- 5. VEREDITO ACADÊMICO E CONCLUSÃO -->
+        <section id="conclusao" class="scroll-mt-20 bg-blue-50 -mx-4 sm:-mx-6 px-4 sm:px-6 py-12 rounded-3xl" aria-labelledby="tit-conclusao">
+            <div class="max-w-4xl mx-auto">
+                <h2 id="tit-conclusao" class="text-3xl font-bold text-slate-800 mb-8 text-center flex items-center justify-center gap-3">
+                    <i data-lucide="gavel" class="w-8 h-8 text-blue-600" aria-hidden="true"></i> Veredito Final
+                </h2>
+                
+                <div class="space-y-6">
+                    <article class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100">
+                        <h3 class="text-xl font-bold text-bluea900 mb-2">Qual é o mais indicado para uso doméstico?</h3>
+                        <p class="text-slate-700 leading-relaxed">Para a maioria, o <strong>Windows</strong> é o rei do conforto doméstico. Quase todos os jogos e programas escolares funcionam nele sem esforço. No entanto, o <strong>ChromeOS Flex</strong> ou o <strong>Linux Mint</strong> são alternativas fantásticas e gratuitas para ressuscitar computadores antigos onde o Windows trava, oferecendo uma experiência focada na internet com zero chance de pegar vírus comuns.</p>
+                    </article>
+
+                    <article class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-900 mb-2">E para empresas e servidores?</h3>
+                        <p class="text-slate-700 leading-relaxed">Para os funcionários de escritório, o <strong>Windows</strong> ou <strong>macOS</strong> dominam pela compatibilidade com o Pacote Office e Adobe. Já nos <strong>Servidores</strong> (os computadores invisíveis que mantêm a internet funcionando), os <strong>Sistemas Livres (Debian, Ubuntu Server) dominam absolutamente o mundo</strong>. Eles são leves, incrivelmente seguros, não exigem interface gráfica e não cobram licenças milionárias por uso.</p>
+                    </article>
+
+                    <article class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-900 mb-2">Sistemas livres podem substituir os pagos?</h3>
+                        <p class="text-slate-700 leading-relaxed"><strong>Sim, e cada vez mais!</strong> Para desenvolvimento de software, navegação web, administração pública (escolas e governos), o Software Livre não só substitui como supera os pagos, gerando economia brutal de dinheiro público. A substituição só é difícil em nichos muito específicos, como edições de cinema (Adobe Premiere) ou jogos com sistemas anti-trapaça muito restritos que só existem para o Windows.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TRANSPARÊNCIA (Relatório de Prompts TCC) -->
+        <section id="prompts" class="scroll-mt-20 border-t-4 border-slate-800 pt-12 mt-12" aria-labelledby="tit-prompts">
+            <h2 id="tit-prompts" class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                <i data-lucide="bot" class="w-8 h-8 text-slate-600" aria-hidden="true"></i> Relatório de Transparência (Prompts de IA)
+            </h2>
+            <p class="text-slate-600 mb-6">De acordo com os requisitos acadêmicos, abaixo estão os comandos exatos utilizados com a Inteligência Artificial para orientar a criação deste projeto, garantindo acessibilidade e linguagem didática.</p>
+            
+            <ul id="lista-prompts" class="space-y-4">
+                <!-- Gerado por JS -->
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- FOOTER E WIDGET VLIBRAS -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center mt-12">
+        <p>Desenvolvido para fins educacionais - Atividade TCC Sistemas Operacionais</p>
+        <p class="text-sm mt-2">Acessibilidade Padrão Universal Ativada.</p>
+    </footer>
+
+    <!-- VLibras Widget -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+
+    <!-- LOGICA E GERADOR DE CONTEUDO DO SITE -->
+    <script>
+        // Inicializar Icones
+        lucide.createIcons();
+
+        // Inicializar VLibras
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+
+        // ==========================================
+        // DADOS: TABELA COMPARATIVA (12 Critérios)
+        // ==========================================
+        const criterios = [
+            { c: "Licença e Custo", livre: "🟢 Geralmente 100% Gratuitos. Você não paga pelo software.", pago: "🔴 Exigem compra de licença (chave) ou assinatura mensal." },
+            { c: "Código-Fonte", livre: "🟢 Aberto. A 'receita' é pública e qualquer pessoa pode ver e mudar.", pago: "🔴 Fechado. Apenas os engenheiros da empresa têm acesso." },
+            { c: "Interface e Curva de Aprendizado", livre: "🟡 Requer um pouco mais de curiosidade no início. Tem opções parecidas com Windows (Mint).", pago: "🟢 Feitos para serem fáceis. O usuário liga o PC e tudo já está pronto para uso." },
+            { c: "Segurança e Vírus", livre: "🟢 Extremamente seguros. Existem pouquíssimos vírus feitos para Linux.", pago: "🔴 Mais visados por hackers, exigem antivírus e cuidado constante." },
+            { c: "Hardware e PCs Antigos", livre: "🟢 Salvam computadores antigos! Gastam pouquíssima memória (RAM) e Processador (CPU).", pago: "🔴 Pesados. Cada nova versão exige um computador mais moderno e potente." },
+            { c: "Atualizações", livre: "🟢 Você atualiza quando quiser. Não é forçado a parar seu trabalho.", pago: "🟡 Frequentes, mas muitas vezes forçam a reinicialização no meio do uso." },
+            { c: "Jogos", livre: "🟡 Melhorou muito com a Steam (Proton), mas alguns jogos famosos ainda bloqueiam o Linux.", pago: "🟢 Compatibilidade universal. 99% dos jogos de PC são feitos nativamente para Windows." },
+            { c: "Programas Profissionais", livre: "🟡 Ótimo para programadores, mas não roda nativamente Photoshop, Corel ou pacote Office original.", pago: "🟢 Padrão da indústria criativa e corporativa. Roda todos os programas comerciais." },
+            { c: "Drivers (Impressoras, Placas)", livre: "🟡 A maioria já vem no núcleo (Kernel), mas placas de vídeo muito novas podem dar dor de cabeça.", pago: "🟢 Suporte garantido pelas fabricantes. É só espetar o USB e usar." },
+            { c: "Suporte Técnico", livre: "🟡 Feito pela Comunidade em fóruns gratuitos. (Suporte empresarial só pagando a Red Hat/Ubuntu Pro).", pago: "🟢 Suporte oficial e centralizado através de chat ou telefone da empresa dona." },
+            { c: "Público-Alvo", livre: "🟢 Servidores, Escolas, Governos, Desenvolvedores e curiosos tecnológicos.", pago: "🟢 Empresas, Gamers, Estúdios de Arte e Usuário Comum." },
+            { c: "Personalização", livre: "🟢 Liberdade total. Você pode mudar a interface inteira do sistema se quiser.", pago: "🔴 Você só pode mudar cores, papel de parede e organização de ícones." }
+        ];
+
+        const tabBody = document.getElementById('tabela-corpo');
+        criterios.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50 transition-colors";
+            tr.innerHTML = `
+                <td class="p-4 border-b border-slate-200 font-bold text-slate-700">${item.c}</td>
+                <td class="p-4 border-b border-slate-200 text-slate-600">${item.livre}</td>
+                <td class="p-4 border-b border-slate-200 text-slate-600">${item.pago}</td>
+            `;
+            tabBody.appendChild(tr);
+        });
+
+        // ==========================================
+        // DADOS: CATÁLOGO DE SISTEMAS OPERACIONAIS
+        // ==========================================
+        const sistemas = [
+            { nome: "Ubuntu", tipo: "Livre (Linux)", logo: "🐧", desc: "O Linux mais famoso. Tem uma interface amigável, uma loja de aplicativos fácil de usar e muito material de ajuda na internet.", cor: "border-orange-500" },
+            { nome: "Linux Mint", tipo: "Livre (Linux)", logo: "🍃", desc: "A porta de entrada perfeita para quem sai do Windows. A interface é muito parecida, o menu iniciar e a barra de tarefas são super familiares.", cor: "border-green-500" },
+            { nome: "Debian", tipo: "Livre (Linux)", logo: "🌀", desc: "O avô do Ubuntu. Conhecido por ser uma rocha de estabilidade. Não atualiza as coisas rápido, mas o que funciona, nunca quebra.", cor: "border-red-600" },
+            { nome: "Fedora", tipo: "Livre (Linux)", logo: "🎩", desc: "Para quem gosta de novidades. Traz as tecnologias e atualizações mais recentes do mundo Linux. Excelente para programadores.", cor: "border-blue-500" },
+            { nome: "Arch Linux", tipo: "Livre (Linux)", logo: "🛠️", desc: "Construa você mesmo. Ele vem vazio e você monta o sistema peça por peça. Recomendado apenas para estudantes avançados de TI.", cor: "border-cyan-500" },
+            
+            { nome: "Microsoft Windows", tipo: "Pago / Proprietário", logo: "🪟", desc: "Domina os computadores domésticos. Roda todos os jogos e programas comerciais, mas sofre mais com vírus e atualizações forçadas.", cor: "border-blue-600" },
+            { nome: "macOS (Apple)", tipo: "Pago (Incluso no Mac)", logo: "🍎", desc: "O rei do design e da criatividade. Extremamente fluido e seguro, mas só pode ser usado se você comprar um hardware caríssimo da Apple.", cor: "border-slate-800" },
+            { nome: "Windows Server", tipo: "Pago / Empresarial", logo: "🏢", desc: "A versão do Windows feita para aguentar o tranco de servidores em grandes redes de empresas. A licença costuma ser muito cara.", cor: "border-indigo-600" },
+            { nome: "Red Hat (RHEL)", tipo: "Pago (Assinatura)", logo: "🔴", desc: "O Linux de terno e gravata. É código aberto, mas empresas pagam uma assinatura cara para ter o suporte técnico 24h especializado da Red Hat.", cor: "border-red-700" },
+            { nome: "ChromeOS Flex", tipo: "Proprietário / Gratuito", logo: "🌐", desc: "Criado pelo Google para ser apenas um navegador gigante. Instala fácil em PCs velhos e serve maravilhosamente para escolas e estudos básicos.", cor: "border-yellow-500" }
+        ];
+
+        const cardsContainer = document.getElementById('cards-container');
+        sistemas.forEach(sis => {
+            const article = document.createElement('article');
+            article.className = `bg-white p-6 rounded-2xl shadow border-t-4 ${sis.cor} hover:shadow-md transition-shadow`;
+            
+            let badgeClass = sis.tipo.includes("Livre") ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800";
+            if (sis.tipo.includes("ChromeOS")) badgeClass = "bg-yellow-100 text-yellow-800";
+
+            article.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-4xl" aria-hidden="true">${sis.logo}</span>
+                    <span class="text-xs font-bold px-2 py-1 rounded-full ${badgeClass}">${sis.tipo}</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">${sis.nome}</h3>
+                <p class="text-sm text-slate-600">${sis.desc}</p>
+                <button onclick="readText(this.parentElement)" class="mt-4 text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 font-semibold" aria-label="Ouvir descrição sobre ${sis.nome}">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i> Ouvir este card
+                </button>
+            `;
+            cardsContainer.appendChild(article);
+        });
+        lucide.createIcons();
+
+        // ==========================================
+        // DADOS: RELATÓRIO DE PROMPTS
+        // ==========================================
+        const prompts = [
+            `"Atue como um especialista em acessibilidade web (WCAG). Gere o código HTML da estrutura inicial do meu site garantindo suporte total a leitores de tela e navegação por teclado."`,
+            `"Escreva um script JavaScript simples usando a Web Speech API para ler o conteúdo da tela em voz alta quando o usuário clicar no botão 'Ouvir'."`,
+            `"Traduza o seguinte texto sobre a diferença entre o Kernel do Linux e o do Windows para uma linguagem que uma pessoa de 60 anos, sem nenhuma experiência com tecnologia, consiga entender facilmente."`,
+            `"Gere uma tabela comparativa no formato JSON entre sistemas livres e pagos, abordando 12 critérios técnicos (memória, drivers, atualizações), mas escreva os prós e contras em linguagem leiga."`,
+            `"Escreva uma conclusão acadêmica e imparcial respondendo quais sistemas são melhores para uso doméstico, empresas e estudantes de TI, justificando do ponto de vista do TCC."`
+        ];
+
+        const promptList = document.getElementById('lista-prompts');
+        prompts.forEach((p, index) => {
+            const li = document.createElement('li');
+            li.className = "bg-slate-100 p-4 rounded-xl border border-slate-200 font-mono text-sm text-slate-700 before:content-['Prompt_' counter(item) ':_'] before:font-bold before:text-blue-600";
+            li.style.counterIncrement = "item";
+            li.innerText = ` ${p}`;
+            promptList.appendChild(li);
+        });
+
+        // ==========================================
+        // FUNÇÕES DE ACESSIBILIDADE
+        // ==========================================
+        
+        // 1. Controle de Tamanho da Fonte
+        let currentFontSize = 16;
+        function changeFontSize(step) {
+            currentFontSize += step * 2;
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 24) currentFontSize = 24;
+            document.documentElement.style.fontSize = currentFontSize + 'px';
+        }
+
+        // 2. Modo de Alto Contraste
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // 3. Web Speech API (Ler Texto)
+        function readText(...elementIds) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Para fala anterior
+                
+                let textToRead = "";
+                elementIds.forEach(id => {
+                    let el = typeof id === 'string' ? document.getElementById(id) : id;
+                    if(el) textToRead += el.innerText + ". ";
+                });
+
+                const utterance = new SpeechSynthesisUtterance(textToRead);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Seu navegador não suporta leitura de tela nativa.");
+            }
+        }
+
+        // Ler seção genérica (pega todo o texto limpo da div)
+        function readSection(containerId) {
+            const container = document.getElementById(containerId);
+            if(container) {
+                // Remove the read button text from the reading
+                let clone = container.cloneNode(true);
+                let buttons = clone.querySelectorAll('button');
+                buttons.forEach(b => b.remove());
+                readText({ innerText: clone.innerText });
+            }
+        }
+
+        // 4. Navegação por Voz (Annyang)
+        let voiceNavActive = false;
+        function toggleVoiceNav() {
+            if (!annyang) {
+                alert("Navegação por voz não suportada neste navegador.");
+                return;
+            }
+
+            const statusBanner = document.getElementById('voice-status');
+            const btnIcon = document.querySelector('#btn-voice-nav i');
+
+            if (voiceNavActive) {
+                annyang.abort();
+                voiceNavActive = false;
+                statusBanner.classList.add('hidden');
+                document.getElementById('btn-voice-nav').classList.remove('text-red-500');
+            } else {
+                // Definir os comandos
+                const commands = {
+                    'descer tela': () => { window.scrollBy(0, window.innerHeight / 2); },
+                    'subir tela': () => { window.scrollBy(0, -window.innerHeight / 2); },
+                    'ir para o topo': () => { window.scrollTo(0,0); },
+                    'ir para tabela': () => { document.getElementById('comparativo').scrollIntoView(); },
+                    'ir para conclusão': () => { document.getElementById('conclusao').scrollIntoView(); },
+                    'alto contraste': () => { toggleHighContrast(); },
+                    'parar de falar': () => { window.speechSynthesis.cancel(); }
+                };
+                
+                annyang.setLanguage('pt-BR');
+                annyang.addCommands(commands);
+                
+                annyang.start({ autoRestart: false, continuous: false });
+                
+                annyang.addCallback('start', () => {
+                    voiceNavActive = true;
+                    statusBanner.classList.remove('hidden');
+                    document.getElementById('btn-voice-nav').classList.add('text-red-500');
+                });
+                
+                annyang.addCallback('error', (err) => {
+                    alert("Erro ao acessar o microfone. Verifique as permissões.");
+                    toggleVoiceNav(); // Desliga
+                });
+            }
+        }
+    </script>
+</body>
+</html>
