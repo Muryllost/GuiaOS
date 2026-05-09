@@ -132,6 +132,29 @@
                     scroll-behavior: auto !important;
                 }
             }
+
+            @media (max-width: 640px) {
+    table {
+        min-width: 600px; /* Garante que a tabela não encolha demais, forçando o scroll horizontal */
+    }
+    
+    /* Melhora a visibilidade do Hero no mobile */
+    #page-home .bg-gradient-to-br {
+        padding: 2rem 1rem !important;
+    }
+    
+    #hero-title {
+        font-size: 2.25rem !important;
+        line-height: 2.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .taskbar {
+        height: 40px;
+        padding: 0 5px;
+    }
+}
         </style>
     </head>
     <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200 antialiased transition-colors duration-300" id="top">
@@ -154,7 +177,7 @@
                     <i data-lucide="universal-access" class="w-5 h-5 text-yellow-400" aria-hidden="true"></i>
                     <span class="font-bold text-sm hidden sm:inline">Acessibilidade Total</span>
                 </div>
-                <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
+                <div class="flex flex-wrap items-center justify-center sm:justify-end gap-1 sm:gap-4 text-xs sm:text-sm">
                     <button onclick="changeFontSize(1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Aumentar texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A+</button>
                     <button onclick="changeFontSize(-1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Diminuir texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A-</button>
                     <button onclick="toggleDyslexicFont()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Fonte para Dislexia"><i data-lucide="type" class="w-4 h-4"></i> Dislexia</button>
@@ -177,23 +200,22 @@
 
         <!-- 2. NAVEGAÇÃO PRINCIPAL (APP ROUTING) -->
         <header class="bg-blue-600 dark:bg-blue-900 text-white shadow-lg sticky top-9 z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="cpu" class="w-8 h-8 text-yellow-400"></i>
-                        <span class="font-black text-xl tracking-wide">Portal OS</span>
-                    </div>
-                    <nav class="hidden md:flex space-x-1 overflow-x-auto scrollbar-hide" aria-label="Navegação do site">
-                        <button onclick="nav('home')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold bg-white/20 hover:bg-white/30 transition">Início</button>
-                        <button onclick="nav('comparativo')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">O Comparativo</button>
-                        <button onclick="nav('galeria')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">Galeria Visual</button>
-                        <button onclick="nav('simulador')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="terminal-square" class="w-4 h-4"></i> Terminais</button>
-                        <button onclick="nav('ia')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="bot" class="w-4 h-4"></i> IA Prompts</button>
-                        <button onclick="nav('referencias')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="book-marked" class="w-4 h-4"></i> Referências</button>
-                    </nav>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col md:flex-row items-center justify-between py-3 md:h-16 gap-3">
+            <div class="flex items-center gap-2">
+                <i data-lucide="cpu" class="w-8 h-8 text-yellow-400"></i>
+                <span class="font-black text-xl tracking-wide">Portal OS</span>
             </div>
-        </header>
+            <nav class="flex w-full md:w-auto space-x-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide justify-start md:justify-end" aria-label="Navegação do site">
+                <button onclick="nav('home')" class="nav-btn whitespace-nowrap px-3 py-2 rounded-md text-sm font-bold bg-white/20 hover:bg-white/30 transition">Início</button>
+                <button onclick="nav('comparativo')" class="nav-btn whitespace-nowrap px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">O Comparativo</button>
+                <button onclick="nav('galeria')" class="nav-btn whitespace-nowrap px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">Galeria Visual</button>
+                <button onclick="nav('simulador')" class="nav-btn whitespace-nowrap px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="terminal-square" class="w-4 h-4"></i> LAB Virtual</button>
+                <button onclick="nav('ia')" class="nav-btn whitespace-nowrap px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="bot" class="w-4 h-4"></i> IA Prompts</button>
+            </nav>
+        </div>
+    </div>
+</header>
 
         <main id="main-content" tabindex="-1" role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-screen relative outline-none">
 
