@@ -1,4 +1,27 @@
 
+   
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        
+        if (localStorage.getItem('dyslexic') === 'true') {
+            document.documentElement.classList.add('font-dyslexic');
+        }
+        tailwind.config = {
+            darkMode: 'class', // Ativa Dark Mode via classe
+            theme: {
+                extend: {
+                    colors: {
+                        hc: { bg: '#000000', text: '#FFFF00', link: '#00FFFF', border: '#FFFFFF' }
+                    }
+                }
+            }
+        }
+    </script>
+
+
         lucide.createIcons();
         new window.VLibras.Widget('https://vlibras.gov.br/app');
 
