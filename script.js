@@ -19,7 +19,7 @@
                 }
             }
         }
-    </script>
+
 
 
         lucide.createIcons();
