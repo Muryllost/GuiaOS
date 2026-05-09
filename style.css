@@ -1,1 +1,82 @@
 
+ /* Foco de Acessibilidade */
+        :focus-visible { outline: 4px solid #facc15 !important; outline-offset: 2px !important; border-radius: 4px; }
+
+        /* Alto Contraste Extremo */
+        body.high-contrast { background-color: #000000 !important; color: #FFFF00 !important; }
+        body.high-contrast * { background-color: transparent !important; color: inherit !important; border-color: #FFFFFF !important; }
+        body.high-contrast button, body.high-contrast .card { border: 2px solid #FFFFFF !important; }
+        
+        /* Ocultar páginas inativas (SPA) */
+        .page-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Terminal Estilo */
+        .term-cursor { display: inline-block; width: 8px; height: 16px; background: #cbd5e1; animation: blink 1s step-end infinite; vertical-align: bottom; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        #term-input:focus { outline: none; }
+
+        /* Flip Cards (Mitos) */
+        .flip-card { perspective: 1000px; width: 100%; min-height: 250px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; min-height: 250px; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1rem; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .flip-card-front { background: #ffffff; color: #1e293b; border: 2px solid #e2e8f0; }
+        .dark .flip-card-front { background: #1e293b; color: #f8fafc; border-color: #334155; }
+        .flip-card-back { background: #3b82f6; color: white; transform: rotateY(180deg); }
+
+        /* Gráficos em CSS Puro */
+        .pie-chart { width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .chart-desktop { background: conic-gradient(#3b82f6 70%, #94a3b8 70%); }
+        .chart-server { background: conic-gradient(#10b981 80%, #94a3b8 80%); }
+
+        body { transition: background-color 0.3s, color 0.3s; }
+
+        /* Estilos do Simulador de Desktop */
+        .desktop-preview {
+            height: 300px;
+            transition: all 0.5s ease;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 48px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        @media (min-width: 640px) {
+            .desktop-preview { height: 420px; }
+        }
+
+        /* Fonte para Dislexia (OpenDyslexic / Comic Sans Fallback) */
+        .font-dyslexic * {
+            font-family: 'OpenDyslexic', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+            letter-spacing: 0.05em !important;
+            word-spacing: 0.1em !important;
+            line-height: 1.6 !important;
+        }
+
+        /* Respeito à "Redução de Animações" (WCAG Prefers Reduced Motion) */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            html.scroll-smooth {
+                scroll-behavior: auto !important;
+            }
+        }
