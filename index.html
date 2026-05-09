@@ -143,11 +143,10 @@
             }
         </script>
 
-        <!-- SKIP LINK PARA NAVEGAÇÃO POR TECLADO (WCAG AAA) -->
-        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:p-4 focus:bg-blue-600 focus:text-white font-bold outline-none focus:ring-4 focus:ring-yellow-400">
-            Saltar para o conteúdo principal
-        </a>
-
+       <!-- 🔊 SKIP LINK PARA NAVEGAÇÃO POR TECLADO (WCAG AAA) -->
+    <a href="#main-content" aria-label="Saltar para o conteúdo principal. Pressione a tecla Alt mais a letra L de leitura para ativar o leitor de voz nativo do site." class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:p-4 focus:bg-blue-600 focus:text-white font-bold outline-none focus:ring-4 focus:ring-yellow-400">
+        Saltar para o conteúdo principal (Atalho de voz: Alt + L)
+    </a>
         <!-- 1. BARRA DE ACESSIBILIDADE TOTAL -->
         <nav aria-label="Menu de Acessibilidade" class="bg-slate-900 dark:bg-black text-white p-2 sticky top-0 z-50 shadow-md">
             <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
@@ -162,6 +161,10 @@
                     <button onclick="toggleDarkMode()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Modo Escuro"><i data-lucide="moon" class="w-4 h-4"></i> Escuro</button>
                     <button onclick="toggleHighContrast()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alto Contraste"><i data-lucide="contrast" class="w-4 h-4"></i> Contraste</button>
                     <button onclick="document.querySelector('[vw-access-button]').click()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center font-bold text-blue-300" aria-label="Tradutor de LGP para Surdos"><i data-lucide="ear-off" class="w-4 h-4"></i> Sinais (Surdos)</button>
+                      <!-- 🔊 Botão de Leitura de Voz -->
+                    <button id="btn-read-page" onclick="readFullPage()" title="Atalho: Alt + L" class="snap-start shrink-0 min-h-[44px] px-3 flex items-center font-bold text-green-300 bg-slate-800 rounded-lg mx-1 hover:text-yellow-400 focus:text-yellow-400 gap-1" aria-label="Ouvir toda a página. Atalho: Alt mais L">
+                        <i data-lucide="volume-2" class="w-4 h-4"></i> <span>Ouvir</span>
+                    </button>
                     <button onclick="toggleVoiceNav()" id="btn-voice-nav" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Controlo por Voz"><i data-lucide="mic" class="w-4 h-4"></i> Voz</button>
                 </div>
             </div>
@@ -658,6 +661,15 @@
                 document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
                 const newPage = document.getElementById('page-' + pageId);
                 newPage.classList.add('active');
+
+                 // 🔊 🔊 CANCELA O ÁUDIO AO MUDAR DE PÁGINA (ACESSIBILIDADE PARA CEGOS)
+            if('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                if(typeof isReadingPage !== 'undefined' && isReadingPage) {
+                    isReadingPage = false;
+                    updateReadButton(false);
+                }
+            }
                 
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.classList.remove('bg-white/20', 'dark:bg-slate-800');
@@ -765,6 +777,107 @@
                     u.lang = 'pt-PT'; window.speechSynthesis.speak(u);
                 }
             }
+
+
+        // ====================================================================================================
+        // 🔊 🔊 🔊 INÍCIO DO CÓDIGO DE ACESSIBILIDADE PARA CEGOS (ASSISTENTE DE VOZ NATIVA) 🔊 🔊 🔊
+        // ====================================================================================================
+        let isReadingPage = false;
+        let readingChunks = [];
+        
+        function readFullPage() {
+            if (!('speechSynthesis' in window)) {
+                alert("Desculpe, o seu navegador não suporta leitura de voz.");
+                return;
+            }
+            
+            if (isReadingPage || window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                isReadingPage = false;
+                updateReadButton(false);
+                return;
+            }
+
+            const activeSection = document.querySelector('.page-section.active');
+            if (!activeSection) return;
+
+            const rawText = activeSection.innerText;
+            
+            readingChunks = rawText.split('\n')
+                                   .map(t => t.trim())
+                                   .filter(t => t.length > 2); 
+
+            if (readingChunks.length === 0) return;
+
+            isReadingPage = true;
+            updateReadButton(true);
+            
+            let startMsg = new SpeechSynthesisUtterance("Iniciando a leitura da página atual.");
+            startMsg.lang = 'pt-BR';
+            
+            startMsg.onend = speakNextChunk; 
+            
+            window.speechSynthesis.speak(startMsg);
+        }
+
+        function speakNextChunk() {
+            if(!isReadingPage || readingChunks.length === 0) {
+                isReadingPage = false;
+                updateReadButton(false);
+                return;
+            }
+            
+            let chunk = readingChunks.shift();
+            let u = new SpeechSynthesisUtterance(chunk);
+            u.lang = 'pt-BR';
+            u.rate = 1.0;
+            
+            u.onend = () => { speakNextChunk(); };
+            u.onerror = () => { speakNextChunk(); };
+            
+            window.speechSynthesis.speak(u);
+        }
+
+        function updateReadButton(active) {
+            const btn = document.getElementById('btn-read-page');
+            if (!btn) return;
+            if(active) {
+                btn.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4 text-red-400"></i> <span class="hidden sm:inline text-red-400">Parar Áudio</span>';
+                btn.classList.replace('text-green-300', 'text-red-400');
+            } else {
+                btn.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4"></i> <span class="hidden sm:inline">Ouvir Tudo</span>';
+                btn.classList.replace('text-red-400', 'text-green-300');
+            }
+            lucide.createIcons();
+        }
+
+        document.addEventListener('focusin', function(e) {
+            if(!isReadingPage && 'speechSynthesis' in window) {
+                const el = e.target;
+                if(el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'INPUT') {
+                    let textToRead = el.getAttribute('aria-label') || el.innerText || el.placeholder;
+                    if(textToRead) {
+                        window.speechSynthesis.cancel();
+                        let u = new SpeechSynthesisUtterance("Foco em: " + textToRead);
+                        u.lang = 'pt-BR';
+                        u.rate = 1.2;
+                        window.speechSynthesis.speak(u);
+                    }
+                }
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey && (e.key === 'l' || e.key === 'L')) {
+                e.preventDefault();
+                readFullPage();
+            }
+        });
+        // ====================================================================================================
+        // 🔊 🔊 🔊 FIM DO CÓDIGO DE ACESSIBILIDADE PARA CEGOS 🔊 🔊 🔊
+        // ====================================================================================================
+
+            
 
             // Navegação por Voz (Annyang)
             let voiceActive = false;
