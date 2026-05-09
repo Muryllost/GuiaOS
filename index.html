@@ -17,6 +17,15 @@
     <!-- Canvas Confetti para o Quiz -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- Script de Inicialização Rápida para LocalStorage (Previne "FOUC") -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <script>
         tailwind.config = {
             darkMode: 'class', // Ativa Dark Mode via classe
@@ -68,6 +77,13 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200 antialiased transition-colors duration-300" id="top">
 
+    <!-- Inicialização de Alto Contraste via LocalStorage -->
+    <script>
+        if (localStorage.getItem('contrast') === 'high') {
+            document.body.classList.add('high-contrast');
+        }
+    </script>
+
     <!-- 1. BARRA DE ACESSIBILIDADE TOTAL -->
     <nav aria-label="Menu de Acessibilidade" class="bg-slate-900 dark:bg-black text-white p-2 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
@@ -99,12 +115,13 @@
                     <i data-lucide="cpu" class="w-8 h-8 text-yellow-400"></i>
                     <span class="font-black text-xl tracking-wide">Portal OS</span>
                 </div>
-                <nav class="hidden md:flex space-x-1 overflow-x-auto" aria-label="Navegação do site">
+                <nav class="hidden md:flex space-x-1 overflow-x-auto scrollbar-hide" aria-label="Navegação do site">
                     <button onclick="nav('home')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold bg-white/20 hover:bg-white/30 transition">Início</button>
                     <button onclick="nav('comparativo')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">O Comparativo</button>
                     <button onclick="nav('galeria')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">Galeria Visual</button>
-                    <button onclick="nav('simulador')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1"><i data-lucide="terminal-square" class="w-4 h-4"></i> Terminais</button>
-                    <button onclick="nav('ia')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1"><i data-lucide="bot" class="w-4 h-4"></i> IA Prompts</button>
+                    <button onclick="nav('simulador')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="terminal-square" class="w-4 h-4"></i> Terminais</button>
+                    <button onclick="nav('ia')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="bot" class="w-4 h-4"></i> IA Prompts</button>
+                    <button onclick="nav('referencias')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="book-marked" class="w-4 h-4"></i> Referências</button>
                 </nav>
             </div>
         </div>
@@ -352,10 +369,10 @@
             </div>
         </div>
 
-        <!-- MODAL DA GALERIA -->
-        <div id="gallery-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()">
+        <!-- MODAL DA GALERIA COM FOCUS TRAP -->
+        <div id="gallery-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 relative" onclick="event.stopPropagation()">
-                <button onclick="closeGalleryModal()" class="absolute top-4 right-4 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition z-10 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Fechar Modal">
+                <button id="close-modal-btn" onclick="closeGalleryModal()" class="absolute top-4 right-4 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition z-10 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Fechar Modal">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
                 <img id="modal-img" src="" alt="Imagem do Sistema" class="w-full h-48 sm:h-64 object-cover">
@@ -363,6 +380,13 @@
                     <h3 id="modal-title" class="text-2xl font-black text-slate-800 dark:text-white mb-3 flex items-center gap-3"></h3>
                     <div id="modal-badges" class="flex flex-wrap gap-2 mb-4"></div>
                     <p id="modal-desc" class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base"></p>
+                    
+                    <!-- Botão Extra apenas para garantir que existe o que focar no final do modal -->
+                    <div class="mt-6 flex justify-end">
+                        <button id="modal-understood-btn" onclick="closeGalleryModal()" class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400 font-bold">
+                            Compreendi
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -466,7 +490,45 @@
             </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- PÁGINA 6: REFERÊNCIAS BIBLIOGRÁFICAS       -->
+        <!-- ========================================== -->
+        <div id="page-referencias" class="page-section">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold mb-4"><i data-lucide="book-marked" class="inline w-8 h-8 text-blue-600"></i> Referências Bibliográficas</h2>
+                <p>Fundamentação teórica e fontes fidedignas utilizadas na construção deste Trabalho de Conclusão de Curso.</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700">
+                <ul class="space-y-6 text-slate-700 dark:text-slate-300">
+                    <li class="pl-4 border-l-4 border-blue-500">
+                        <strong>SILBERSCHATZ, Abraham; GALVIN, Peter Baer; GAGNE, Greg.</strong> <em>Sistemas Operativos com Java</em>. 8ª Edição. Rio de Janeiro: Elsevier, 2010.
+                    </li>
+                    <li class="pl-4 border-l-4 border-orange-500">
+                        <strong>TANENBAUM, Andrew S.</strong> <em>Sistemas Operativos Modernos</em>. 3ª Edição. São Paulo: Pearson Prentice Hall, 2010.
+                    </li>
+                    <li class="pl-4 border-l-4 border-green-500">
+                        <strong>STALLMAN, Richard.</strong> <em>O Projeto GNU e o Movimento do Software Livre</em>. Disponível em: <a href="https://www.gnu.org" target="_blank" class="text-blue-500 hover:underline">www.gnu.org</a>. Acesso em: Mai. 2026.
+                    </li>
+                    <li class="pl-4 border-l-4 border-slate-500">
+                        <strong>MICROSOFT.</strong> <em>Documentação Oficial do Windows 11 e Windows Server</em>. Disponível em: <a href="https://learn.microsoft.com/windows" target="_blank" class="text-blue-500 hover:underline">learn.microsoft.com</a>. Acesso em: Mai. 2026.
+                    </li>
+                    <li class="pl-4 border-l-4 border-purple-500">
+                        <strong>W3C (World Wide Web Consortium).</strong> <em>Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.1</em>. Disponível em: <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" class="text-blue-500 hover:underline">w3.org/WAI</a>. Acesso em: Mai. 2026.
+                    </li>
+                    <li class="pl-4 border-l-4 border-red-500">
+                        <strong>LINUX FOUNDATION.</strong> <em>O Impacto do Software Livre em Ambientes Corporativos</em>. Disponível em: <a href="https://www.linuxfoundation.org/" target="_blank" class="text-blue-500 hover:underline">linuxfoundation.org</a>. Acesso em: Mai. 2026.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </main>
+
+    <!-- Botão Voltar ao Topo (Invisível no Início) -->
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-xl opacity-0 pointer-events-none transition-all duration-300 z-50 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:-translate-y-1" aria-label="Voltar ao Topo">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </button>
 
     <!-- FOOTER E WIDGET VLIBRAS -->
     <footer class="bg-slate-900 text-slate-400 py-8 text-center border-t border-slate-800">
@@ -487,7 +549,7 @@
         new window.VLibras.Widget('https://vlibras.gov.br/app');
 
         // ==========================================
-        // 1. SISTEMA DE ROTAS (SPA)
+        // 1. SISTEMA DE ROTAS (SPA) E VOLTAR AO TOPO
         // ==========================================
         function nav(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
@@ -495,12 +557,27 @@
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-white/20', 'dark:bg-slate-800');
-                if(btn.innerText.toLowerCase().includes(pageId) || (pageId==='home' && btn.innerText.includes('Início'))) {
+                if(btn.innerText.toLowerCase().includes(pageId) || 
+                  (pageId==='home' && btn.innerText.includes('Início')) ||
+                  (pageId==='ia' && btn.innerText.includes('IA')) ||
+                  (pageId==='referencias' && btn.innerText.includes('Referências')) ) {
                     btn.classList.add('bg-white/20');
                 }
             });
             window.scrollTo(0, 0);
         }
+
+        // Mostrar / Esconder botão "Voltar ao Topo"
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                btn.classList.remove('opacity-0', 'pointer-events-none');
+                btn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                btn.classList.remove('opacity-100', 'pointer-events-auto');
+                btn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
 
         // ==========================================
         // 2. DADOS: TABELA COMPARATIVA E PROMPTS
@@ -532,15 +609,27 @@
         });
 
         // ==========================================
-        // 3. ACESSIBILIDADE E DARK MODE
+        // 3. ACESSIBILIDADE E DARK MODE (COM LOCALSTORAGE)
         // ==========================================
         let currentFontSize = 16;
         function changeFontSize(step) {
             currentFontSize += step * 2;
             if(currentFontSize >= 12 && currentFontSize <= 24) document.documentElement.style.fontSize = currentFontSize + 'px';
         }
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
-        function toggleHighContrast() { document.body.classList.toggle('high-contrast'); }
+        
+        function toggleDarkMode() { 
+            const html = document.documentElement;
+            html.classList.toggle('dark'); 
+            // Guarda preferência
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+        
+        function toggleHighContrast() { 
+            const body = document.body;
+            body.classList.toggle('high-contrast'); 
+            // Guarda preferência
+            localStorage.setItem('contrast', body.classList.contains('high-contrast') ? 'high' : 'normal');
+        }
         
         function readText(...ids) {
             if('speechSynthesis' in window) {
@@ -561,12 +650,13 @@
             } else {
                 annyang.setLanguage('pt-PT');
                 annyang.addCommands({
-                    'descer': () => window.scrollBy(0, 400),
-                    'subir': () => window.scrollBy(0, -400),
+                    'descer': () => window.scrollBy({top: 400, behavior: 'smooth'}),
+                    'subir': () => window.scrollBy({top: -400, behavior: 'smooth'}),
                     'página comparativo': () => nav('comparativo'),
                     'página início': () => nav('home'),
                     'página terminais': () => nav('simulador'),
                     'página inteligência': () => nav('ia'),
+                    'página referências': () => nav('referencias'),
                     'modo escuro': () => toggleDarkMode()
                 });
                 annyang.start({autoRestart: false});
@@ -576,7 +666,7 @@
         }
 
         // ==========================================
-        // DADOS E FUNÇÕES DO MODAL DA GALERIA
+        // DADOS E FUNÇÕES DO MODAL DA GALERIA (COM FOCUS TRAP)
         // ==========================================
         const galleryData = {
             'windows': {
@@ -616,9 +706,15 @@
             }
         };
 
+        let lastFocusedElement = null;
+        let trapFocusListener = null;
+
         function openGalleryModal(osKey) {
             const data = galleryData[osKey];
             if(!data) return;
+
+            // Guarda o elemento atual para devolver o foco ao fechar
+            lastFocusedElement = document.activeElement;
 
             document.getElementById('modal-img').src = data.img;
             document.getElementById('modal-title').innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i> ${data.title}`;
@@ -634,9 +730,49 @@
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modal.children[0].classList.remove('scale-95');
+                setupFocusTrap(modal);
             }, 10);
             
             lucide.createIcons();
+        }
+
+        // Lógica Avançada de Acessibilidade (Focus Trap)
+        function setupFocusTrap(modal) {
+            // Seleciona todos os elementos focáveis dentro do modal
+            const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (focusableElements.length === 0) return;
+
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            // Foca no primeiro botão (Fechar)
+            firstElement.focus();
+
+            trapFocusListener = function(e) {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) { // Se Shift + Tab
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else { // Apenas Tab
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            };
+
+            modal.addEventListener('keydown', trapFocusListener);
+            
+            // Permite fechar com a tecla ESC
+            modal.addEventListener('keydown', function escListener(e) {
+                if(e.key === 'Escape') {
+                    closeGalleryModal();
+                    modal.removeEventListener('keydown', escListener);
+                }
+            });
         }
 
         function closeGalleryModal() {
@@ -644,8 +780,16 @@
             modal.classList.add('opacity-0');
             modal.children[0].classList.add('scale-95');
             
+            if (trapFocusListener) {
+                modal.removeEventListener('keydown', trapFocusListener);
+            }
+            
             setTimeout(() => {
                 modal.classList.add('hidden');
+                // Devolve o foco ao cartão que abriu o modal
+                if (lastFocusedElement) {
+                    lastFocusedElement.focus();
+                }
             }, 300);
         }
 
@@ -842,7 +986,7 @@
                 const msgLower = msg.toLowerCase();
 
                 if(msgLower.includes('acessibilidade web') || msgLower.includes('leitores de tela')) {
-                    resposta = "✅ **Comando Reconhecido!**\n\nPara atender a este prompt, estruturei o HTML com tags semânticas, adicionei atributos `aria-label` aos botões, configurei `aria-live` nas notificações para os leitores de ecrã, criei atalhos para Alto Contraste, tamanhos de fonte e integrei as bibliotecas VLibras (para a comunidade surda) e Annyang (para os controlos de voz).";
+                    resposta = "✅ **Comando Reconhecido!**\n\nPara atender a este prompt, estruturei o HTML com tags semânticas, adicionei atributos `aria-label` aos botões, configurei `aria-live` nas notificações para os leitores de ecrã, criei atalhos para Alto Contraste, tamanhos de fonte e integrei as bibliotecas VLibras (para a comunidade surda) e Annyang (para os controlos de voz). Além disso, implementei o **Focus Trapping** no Modal da Galeria.";
                 } else if(msgLower.includes('quiz interativo') || msgLower.includes('chapéu seletor')) {
                     resposta = "✅ **Comando Reconhecido!**\n\nDesenvolvi a lógica do Quiz armazenando perguntas num Array (vetor) de Objetos. Usei variáveis de estado em JavaScript (`quizStep` e `quizScores`) para gerir as respostas e calcular qual Sistema Operacional somava mais pontos. No final, implementei o disparo de confetes virtuais usando a biblioteca `canvas-confetti`.";
                 } else if(msgLower.includes('calculadora de economia')) {
@@ -852,7 +996,7 @@
                 } else if(msgLower.includes('metáfora de uma cozinha') || msgLower.includes('código aberto')) {
                     resposta = "✅ **Comando Reconhecido!**\n\nGerei a secção 'A Metáfora da Cozinha' usando os componentes visuais do Tailwind. Criei 'Cards' interativos com ícones SVG da biblioteca Lucide para explicar a estrutura do Código Aberto de forma lúdica, permitindo que qualquer utilizador não técnico entenda a diferença.";
                 } else if(msgLower.includes('transições css puras') || msgLower.includes('spa') || msgLower.includes('dark mode') || msgLower.includes('modo escuro')) {
-                    resposta = "✅ **Comando Reconhecido!**\n\nAdicionei a classe `dark:` nas propriedades do Tailwind para ativar o modo escuro imediato. Para a navegação SPA (Single Page Application), construí a função Javascript `nav(pageId)` que gere a transição ocultando todas as secções (display: none) e exibindo apenas a secção selecionada (display: block), tudo sem recarregar o navegador.";
+                    resposta = "✅ **Comando Reconhecido!**\n\nAdicionei a classe `dark:` nas propriedades do Tailwind para ativar o modo escuro, com as preferências guardadas usando a API `localStorage`. Para a navegação SPA (Single Page Application), construí a função Javascript `nav(pageId)` que gere a transição ocultando todas as secções (display: none) e exibindo apenas a secção selecionada (display: block), sem recarregar o navegador.";
                 } else {
                     resposta = "⚠️ **Comando Não Reconhecido**\n\nDesculpe, mas como esta é uma demonstração restrita do TCC, esta Inteligência Artificial está programada para responder **apenas aos prompts exatos** utilizados pelo aluno para construir o projeto.\n\nPor favor, copie e utilize um dos prompts listados na caixa de 'Sugestões' acima ou no 'Relatório de Transparência' abaixo.";
                 }
