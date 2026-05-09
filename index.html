@@ -44,27 +44,8 @@
     </script>
 
     <style>
-   /* 1. Esconde a imagem original do VLibras que está quebrada */
-[vw-access-button] img {
+        [vw-access-button] {
     display: none !important;
-}
-
-/* 2. Recria o botão com um ícone oficial de Língua de Sinais que funciona */
-[vw-access-button] {
-    background-color: #2563eb !important; /* Azul moderno */
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Sign_Language_Icon.svg') !important;
-    background-size: 65% !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    border-radius: 50% !important; /* Deixa o botão perfeitamente redondo */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-
-/* 3. Efeito ao passar o rato por cima (Hover) */
-[vw-access-button]:hover {
-    background-color: #1d4ed8 !important; /* Azul mais escuro */
-    transform: scale(1.05) !important;
-    transition: all 0.3s ease !important;
 }
         /* Foco de Acessibilidade */
         :focus-visible { outline: 4px solid #facc15 !important; outline-offset: 2px !important; border-radius: 4px; }
