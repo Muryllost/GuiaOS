@@ -24,6 +24,10 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+        
+        if (localStorage.getItem('dyslexic') === 'true') {
+            document.documentElement.classList.add('font-dyslexic');
+        }
     </script>
 
     <script>
@@ -73,6 +77,27 @@
         .chart-server { background: conic-gradient(#10b981 80%, #94a3b8 80%); }
 
         body { transition: background-color 0.3s, color 0.3s; }
+
+        /* Fonte para Dislexia (OpenDyslexic / Comic Sans Fallback) */
+        .font-dyslexic * {
+            font-family: 'OpenDyslexic', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+            letter-spacing: 0.05em !important;
+            word-spacing: 0.1em !important;
+            line-height: 1.6 !important;
+        }
+
+        /* Respeito à "Redução de Animações" (WCAG Prefers Reduced Motion) */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            html.scroll-smooth {
+                scroll-behavior: auto !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200 antialiased transition-colors duration-300" id="top">
@@ -84,6 +109,11 @@
         }
     </script>
 
+    <!-- SKIP LINK PARA NAVEGAÇÃO POR TECLADO (WCAG AAA) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:p-4 focus:bg-blue-600 focus:text-white font-bold outline-none focus:ring-4 focus:ring-yellow-400">
+        Saltar para o conteúdo principal
+    </a>
+
     <!-- 1. BARRA DE ACESSIBILIDADE TOTAL -->
     <nav aria-label="Menu de Acessibilidade" class="bg-slate-900 dark:bg-black text-white p-2 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
@@ -94,6 +124,7 @@
             <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
                 <button onclick="changeFontSize(1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Aumentar texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A+</button>
                 <button onclick="changeFontSize(-1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Diminuir texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A-</button>
+                <button onclick="toggleDyslexicFont()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Fonte para Dislexia"><i data-lucide="type" class="w-4 h-4"></i> Dislexia</button>
                 <button onclick="toggleDarkMode()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Modo Escuro"><i data-lucide="moon" class="w-4 h-4"></i> Escuro</button>
                 <button onclick="toggleHighContrast()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alto Contraste"><i data-lucide="contrast" class="w-4 h-4"></i> Contraste</button>
                 <button onclick="document.querySelector('[vw-access-button]').click()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center font-bold text-blue-300" aria-label="Tradutor de LGP para Surdos"><i data-lucide="ear-off" class="w-4 h-4"></i> Sinais (Surdos)</button>
@@ -127,7 +158,7 @@
         </div>
     </header>
 
-    <main role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-screen relative">
+    <main id="main-content" tabindex="-1" role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-screen relative outline-none">
 
         <!-- ========================================== -->
         <!-- PÁGINA 1: INÍCIO E INTRODUÇÃO -->
@@ -292,7 +323,7 @@
                     <h2 class="text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="piggy-bank" class="text-yellow-400"></i> Calculadora de Impacto Financeiro</h2>
                     <p class="mb-6 max-w-2xl mx-auto">Quanto uma empresa economiza em 3 anos usando Linux (Livre) em vez de comprar licenças do Windows + Antivírus (Média de 1.450€ / máquina)?</p>
                     <div class="bg-black/20 p-6 rounded-xl inline-block backdrop-blur-sm border border-emerald-600">
-                        <label class="block font-bold mb-3">Número de Computadores:</label>
+                        <label for="calc-pcs" class="block font-bold mb-3">Número de Computadores:</label>
                         <div class="flex gap-2">
                             <input type="number" id="calc-pcs" value="10" min="1" class="w-24 text-black text-xl font-bold p-2 rounded outline-none focus:ring-4 focus:ring-yellow-400">
                             <button onclick="calcularEconomia()" class="bg-yellow-400 text-emerald-900 font-bold px-6 py-2 rounded hover:bg-yellow-300 transition-colors shadow">Calcular</button>
@@ -553,7 +584,8 @@
         // ==========================================
         function nav(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
+            const newPage = document.getElementById('page-' + pageId);
+            newPage.classList.add('active');
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-white/20', 'dark:bg-slate-800');
@@ -565,6 +597,13 @@
                 }
             });
             window.scrollTo(0, 0);
+
+            // GESTÃO DE FOCO (SPA Acessibilidade) - Move o foco para o título da nova secção
+            const headingToFocus = newPage.querySelector('h1, h2');
+            if (headingToFocus) {
+                headingToFocus.setAttribute('tabindex', '-1');
+                headingToFocus.focus();
+            }
         }
 
         // Mostrar / Esconder botão "Voltar ao Topo"
@@ -592,7 +631,7 @@
         const tabBody = document.getElementById('tabela-corpo');
         criterios.forEach(item => {
             tabBody.innerHTML += `<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-                <td class="p-4 font-bold">${item.c}</td><td class="p-4 text-emerald-700 dark:textemerald-400 font-medium">${item.livre}</td><td class="p-4 text-rose-700 dark:text-rose-400 font-medium">${item.pago}</td></tr>`;
+                <td class="p-4 font-bold">${item.c}</td><td class="p-4 text-emerald-700 dark:text-emerald-400 font-medium">${item.livre}</td><td class="p-4 text-rose-700 dark:text-rose-400 font-medium">${item.pago}</td></tr>`;
         });
 
         const promptsTCC = [
@@ -630,6 +669,13 @@
             // Guarda preferência
             localStorage.setItem('contrast', body.classList.contains('high-contrast') ? 'high' : 'normal');
         }
+
+        function toggleDyslexicFont() {
+            const html = document.documentElement;
+            html.classList.toggle('font-dyslexic');
+            // Guarda preferência
+            localStorage.setItem('dyslexic', html.classList.contains('font-dyslexic') ? 'true' : 'false');
+        }
         
         function readText(...ids) {
             if('speechSynthesis' in window) {
@@ -657,12 +703,18 @@
                     'página terminais': () => nav('simulador'),
                     'página inteligência': () => nav('ia'),
                     'página referências': () => nav('referencias'),
-                    'modo escuro': () => toggleDarkMode()
+                    'modo escuro': () => toggleDarkMode(),
+                    'modo dislexia': () => toggleDyslexicFont()
                 });
                 annyang.start({autoRestart: false});
                 voiceActive = true;
                 document.getElementById('voice-status').classList.remove('hidden');
             }
+        }
+
+        // Verifica Redução de Animações do Utilizador
+        function prefersReducedMotion() {
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         }
 
         // ==========================================
@@ -865,7 +917,11 @@
 
                 quizContainer.innerHTML = `<div class="p-8 text-center animate-fade-in">${resHtml} <br><button onclick="startQuiz()" class="mt-8 px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition">Refazer o Teste</button></div>`;
                 lucide.createIcons();
-                if(typeof confetti === 'function') confetti({ particleCount: 150, spread: 90, origin: {y: 0.6} });
+                
+                // Dispara os confettis apenas se o utilizador não tiver restrições de movimento
+                if(typeof confetti === 'function' && !prefersReducedMotion()) {
+                    confetti({ particleCount: 150, spread: 90, origin: {y: 0.6} });
+                }
             }
         }
         
