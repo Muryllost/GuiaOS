@@ -78,6 +78,33 @@
 
         body { transition: background-color 0.3s, color 0.3s; }
 
+        /* Estilos do Simulador de Desktop */
+        .desktop-preview {
+            height: 300px;
+            transition: all 0.5s ease;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 48px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        @media (min-width: 640px) {
+            .desktop-preview { height: 420px; }
+        }
+
         /* Fonte para Dislexia (OpenDyslexic / Comic Sans Fallback) */
         .font-dyslexic * {
             font-family: 'OpenDyslexic', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
@@ -98,10 +125,6 @@
                 scroll-behavior: auto !important;
             }
         }
-        
-        /* Ocultar scrollbar nos menus mobile mas manter função de deslizar */
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200 antialiased transition-colors duration-300" id="top">
@@ -118,104 +141,98 @@
         Saltar para o conteúdo principal
     </a>
 
-    <!-- CABEÇALHO FIXO UNIFICADO (Melhora o comportamento no mobile) -->
-    <div class="sticky top-0 z-50 w-full shadow-md">
-        
-        <!-- 1. BARRA DE ACESSIBILIDADE TOTAL -->
-        <nav aria-label="Menu de Acessibilidade" class="bg-slate-900 dark:bg-black text-white p-2">
-            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="universal-access" class="w-5 h-5 text-yellow-400" aria-hidden="true"></i>
-                    <span class="font-bold text-sm hidden sm:inline">Acessibilidade Total</span>
-                </div>
-                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
-                    <button onclick="changeFontSize(1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Aumentar texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A+</button>
-                    <button onclick="changeFontSize(-1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Diminuir texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A-</button>
-                    <button onclick="toggleDyslexicFont()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Fonte para Dislexia"><i data-lucide="type" class="w-4 h-4"></i> <span class="hidden sm:inline">Dislexia</span></button>
-                    <button onclick="toggleDarkMode()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Modo Escuro"><i data-lucide="moon" class="w-4 h-4"></i> <span class="hidden sm:inline">Escuro</span></button>
-                    <button onclick="toggleHighContrast()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alto Contraste"><i data-lucide="contrast" class="w-4 h-4"></i> <span class="hidden sm:inline">Contraste</span></button>
-                    <button onclick="document.querySelector('[vw-access-button]').click()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center font-bold text-blue-300" aria-label="Tradutor de LGP para Surdos"><i data-lucide="ear-off" class="w-4 h-4"></i> <span class="hidden sm:inline">Sinais</span></button>
-                    <button onclick="toggleVoiceNav()" id="btn-voice-nav" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Controlo por Voz"><i data-lucide="mic" class="w-4 h-4"></i> <span class="hidden sm:inline">Voz</span></button>
-                </div>
+    <!-- 1. BARRA DE ACESSIBILIDADE TOTAL -->
+    <nav aria-label="Menu de Acessibilidade" class="bg-slate-900 dark:bg-black text-white p-2 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <i data-lucide="universal-access" class="w-5 h-5 text-yellow-400" aria-hidden="true"></i>
+                <span class="font-bold text-sm hidden sm:inline">Acessibilidade Total</span>
             </div>
-        </nav>
-
-        <!-- STATUS DE VOZ -->
-        <div id="voice-status" class="hidden absolute top-full mt-2 right-4 bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold shadow-lg z-50 flex items-center gap-2 animate-pulse" role="alert" aria-live="assertive">
-            <i data-lucide="mic" class="w-5 h-5"></i> A escutar... Diga "Página X" ou "Descer"
+            <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
+                <button onclick="changeFontSize(1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Aumentar texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A+</button>
+                <button onclick="changeFontSize(-1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Diminuir texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A-</button>
+                <button onclick="toggleDyslexicFont()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Fonte para Dislexia"><i data-lucide="type" class="w-4 h-4"></i> Dislexia</button>
+                <button onclick="toggleDarkMode()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Modo Escuro"><i data-lucide="moon" class="w-4 h-4"></i> Escuro</button>
+                <button onclick="toggleHighContrast()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alto Contraste"><i data-lucide="contrast" class="w-4 h-4"></i> Contraste</button>
+                <button onclick="document.querySelector('[vw-access-button]').click()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center font-bold text-blue-300" aria-label="Tradutor de LGP para Surdos"><i data-lucide="ear-off" class="w-4 h-4"></i> Sinais (Surdos)</button>
+                <button onclick="toggleVoiceNav()" id="btn-voice-nav" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Controlo por Voz"><i data-lucide="mic" class="w-4 h-4"></i> Voz</button>
+            </div>
         </div>
+    </nav>
 
-        <!-- 2. NAVEGAÇÃO PRINCIPAL (APP ROUTING) -->
-        <header class="bg-blue-600 dark:bg-blue-900 text-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
-                <div class="flex flex-col md:flex-row items-center justify-between py-2 md:h-16 gap-3 md:gap-0">
-                    <div class="flex items-center gap-2 w-full md:w-auto justify-center md:justify-start">
-                        <i data-lucide="cpu" class="w-6 h-6 md:w-8 md:h-8 text-yellow-400"></i>
-                        <span class="font-black text-lg md:text-xl tracking-wide">Portal OS</span>
-                    </div>
-                    <!-- Navigation (Mobile Responsive) -->
-                    <nav class="flex space-x-2 overflow-x-auto scrollbar-hide w-full md:w-auto pb-1 md:pb-0 scroll-smooth snap-x" aria-label="Navegação do site">
-                        <button onclick="nav('home')" class="snap-start shrink-0 nav-btn px-3 py-2 rounded-md text-xs sm:text-sm font-bold bg-white/20 hover:bg-white/30 transition">Início</button>
-                        <button onclick="nav('comparativo')" class="snap-start shrink-0 nav-btn px-3 py-2 rounded-md text-xs sm:text-sm font-bold hover:bg-white/20 transition">O Comparativo</button>
-                        <button onclick="nav('galeria')" class="snap-start shrink-0 nav-btn px-3 py-2 rounded-md text-xs sm:text-sm font-bold hover:bg-white/20 transition">Galeria Visual</button>
-                        <button onclick="nav('simulador')" class="snap-start shrink-0 nav-btn px-3 py-2 rounded-md text-xs sm:text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="terminal-square" class="w-4 h-4"></i> Terminais</button>
-                        <button onclick="nav('ia')" class="snap-start shrink-0 nav-btn px-3 py-2 rounded-md text-xs sm:text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="bot" class="w-4 h-4"></i> IA Prompts</button>
-                        <button onclick="nav('referencias')" class="snap-start shrink-0 nav-btn px-3 py-2 rounded-md text-xs sm:text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="book-marked" class="w-4 h-4"></i> Referências</button>
-                    </nav>
-                </div>
-            </div>
-        </header>
-
+    <!-- STATUS DE VOZ -->
+    <div id="voice-status" class="hidden fixed top-16 right-4 bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold shadow-lg z-50 flex items-center gap-2 animate-pulse" role="alert" aria-live="assertive">
+        <i data-lucide="mic" class="w-5 h-5"></i> A escutar... Diga "Página X" ou "Descer"
     </div>
 
-    <main id="main-content" tabindex="-1" role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-8 min-h-screen relative outline-none">
+    <!-- 2. NAVEGAÇÃO PRINCIPAL (APP ROUTING) -->
+    <header class="bg-blue-600 dark:bg-blue-900 text-white shadow-lg sticky top-9 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="cpu" class="w-8 h-8 text-yellow-400"></i>
+                    <span class="font-black text-xl tracking-wide">Portal OS</span>
+                </div>
+                <nav class="hidden md:flex space-x-1 overflow-x-auto scrollbar-hide" aria-label="Navegação do site">
+                    <button onclick="nav('home')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold bg-white/20 hover:bg-white/30 transition">Início</button>
+                    <button onclick="nav('comparativo')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">O Comparativo</button>
+                    <button onclick="nav('galeria')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition">Galeria Visual</button>
+                    <button onclick="nav('simulador')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="terminal-square" class="w-4 h-4"></i> Terminais</button>
+                    <button onclick="nav('ia')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="bot" class="w-4 h-4"></i> IA Prompts</button>
+                    <button onclick="nav('referencias')" class="nav-btn px-3 py-2 rounded-md text-sm font-bold hover:bg-white/20 transition flex gap-1 items-center"><i data-lucide="book-marked" class="w-4 h-4"></i> Referências</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" tabindex="-1" role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-screen relative outline-none">
 
         <!-- ========================================== -->
         <!-- PÁGINA 1: INÍCIO E INTRODUÇÃO -->
         <!-- ========================================== -->
-        <div id="page-home" class="page-section active space-y-10 md:space-y-16">
+        <div id="page-home" class="page-section active space-y-16">
             <!-- Hero -->
-            <div class="bg-gradient-to-br from-indigo-700 to-blue-900 text-white p-6 sm:p-10 lg:p-16 rounded-3xl text-center shadow-xl relative overflow-hidden">
-                <button onclick="readText('hero-title', 'hero-sub')" class="absolute top-4 right-4 bg-white/20 p-2 rounded-full" aria-label="Ouvir texto principal"><i data-lucide="volume-2" class="w-5 h-5 sm:w-6 sm:h-6"></i></button>
-                <h1 id="hero-title" class="text-3xl sm:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 leading-tight">Software Livre vs Pago</h1>
-                <p id="hero-sub" class="text-lg sm:text-xl font-light mb-6 sm:mb-8 max-w-2xl mx-auto">Um estudo completo, acessível e interativo para o Trabalho de Conclusão de Curso (TCC). Entenda de uma vez por todas a diferença entre os sistemas.</p>
-                <button onclick="nav('comparativo')" class="bg-yellow-400 text-blue-900 px-6 sm:px-8 py-3 rounded-full font-bold text-base sm:text-lg hover:bg-yellow-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white">Ver o Comparativo Completo</button>
+            <div class="bg-gradient-to-br from-indigo-700 to-blue-900 text-white p-10 sm:p-16 rounded-3xl text-center shadow-xl relative overflow-hidden">
+                <button onclick="readText('hero-title', 'hero-sub')" class="absolute top-4 right-4 bg-white/20 p-2 rounded-full" aria-label="Ouvir texto principal"><i data-lucide="volume-2" class="w-6 h-6"></i></button>
+                <h1 id="hero-title" class="text-4xl sm:text-6xl font-black mb-6">Software Livre vs Pago</h1>
+                <p id="hero-sub" class="text-xl font-light mb-8 max-w-2xl mx-auto">Um estudo completo, acessível e interativo para o Trabalho de Conclusão de Curso (TCC). Entenda de uma vez por todas a diferença entre os sistemas.</p>
+                <button onclick="nav('comparativo')" class="bg-yellow-400 text-blue-900 px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white">Ver o Comparativo Completo</button>
             </div>
 
             <!-- Opinião dos Utilizadores (LÍDERES DE TECNOLOGIA) -->
             <section aria-labelledby="tit-depoimentos">
-                <h2 id="tit-depoimentos" class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center flex justify-center items-center gap-3">
-                    <i data-lucide="message-square-quote" class="w-7 h-7 sm:w-8 sm:h-8 text-emerald-500"></i> A Visão dos Líderes
+                <h2 id="tit-depoimentos" class="text-3xl font-bold mb-8 text-center flex justify-center items-center gap-3">
+                    <i data-lucide="message-square-quote" class="w-8 h-8 text-emerald-500"></i> A Visão dos Líderes
                 </h2>
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-white dark:bg-slate-800 p-5 sm:p-6 rounded-2xl shadow border-t-4 border-blue-500">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border-t-4 border-blue-500">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">BG</div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">BG</div>
                             <div>
-                                <h4 class="font-bold text-sm sm:text-base">Bill Gates</h4>
-                                <p class="text-xs text-slate-500">Fundador da Microsoft</p>
+                                <h4 class="font-bold">Bill Gates</h4>
+                                <p class="text-xs text-slate-500">Fundador da Microsoft (Windows)</p>
                             </div>
                         </div>
                         <p class="text-sm italic text-slate-600 dark:text-slate-300">"A nossa visão sempre foi colocar um computador em cada secretária e em cada casa. O Windows democratizou a tecnologia, tornando os computadores compatíveis com tudo e fáceis de utilizar para o utilizador comum."</p>
                     </div>
                     
-                    <div class="bg-white dark:bg-slate-800 p-5 sm:p-6 rounded-2xl shadow border-t-4 border-orange-500">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border-t-4 border-orange-500">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold shrink-0">EM</div>
+                            <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold">EM</div>
                             <div>
-                                <h4 class="font-bold text-sm sm:text-base">Elon Musk</h4>
-                                <p class="text-xs text-slate-500">CEO da SpaceX e Tesla</p>
+                                <h4 class="font-bold">Elon Musk</h4>
+                                <p class="text-xs text-slate-500">CEO da SpaceX e Tesla (Usa Linux)</p>
                             </div>
                         </div>
                         <p class="text-sm italic text-slate-600 dark:text-slate-300">"Nos ecrãs dos carros da Tesla e nos computadores de bordo dos foguetões Falcon 9, utilizamos sistemas baseados em Linux. O código aberto permite-nos ter a fiabilidade absoluta necessária para missões críticas."</p>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-800 p-5 sm:p-6 rounded-2xl shadow border-t-4 border-slate-500">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border-t-4 border-slate-500">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold shrink-0">SJ</div>
+                            <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold">SJ</div>
                             <div>
-                                <h4 class="font-bold text-sm sm:text-base">Steve Jobs</h4>
-                                <p class="text-xs text-slate-500">Cofundador da Apple</p>
+                                <h4 class="font-bold">Steve Jobs</h4>
+                                <p class="text-xs text-slate-500">Cofundador da Apple (macOS)</p>
                             </div>
                         </div>
                         <p class="text-sm italic text-slate-600 dark:text-slate-300">"O design não é apenas o aspeto visual e a sensação. O design é como funciona. Criámos o Mac para ser a simbiose perfeita entre hardware e software, focado na fluidez e na criatividade."</p>
@@ -225,48 +242,48 @@
 
             <!-- Mitos e Verdades -->
             <section aria-labelledby="tit-mitos">
-                <h2 id="tit-mitos" class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center flex justify-center items-center gap-3">
-                    <i data-lucide="sparkles" class="w-7 h-7 sm:w-8 sm:h-8 text-yellow-500"></i> Mitos e Verdades
+                <h2 id="tit-mitos" class="text-3xl font-bold mb-8 text-center flex justify-center items-center gap-3">
+                    <i data-lucide="sparkles" class="w-8 h-8 text-yellow-500"></i> Mitos e Verdades
                 </h2>
-                <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
+                <div class="grid md:grid-cols-3 gap-8">
                     <button class="flip-card" onclick="this.classList.toggle('flipped')" aria-label="Revelar mito sobre interface">
                         <div class="flip-card-inner">
-                            <div class="flip-card-front card p-6">
-                                <i data-lucide="terminal" class="w-10 h-10 sm:w-12 sm:h-12 text-slate-400 mb-4"></i>
-                                <h3 class="font-bold text-lg sm:text-xl text-center">"Linux é só um ecrã preto difícil."</h3>
-                                <span class="mt-4 text-xs sm:text-sm text-blue-500 font-bold">Clique para revelar</span>
+                            <div class="flip-card-front card">
+                                <i data-lucide="terminal" class="w-12 h-12 text-slate-400 mb-4"></i>
+                                <h3 class="font-bold text-xl text-center">"Linux é só um ecrã preto difícil."</h3>
+                                <span class="mt-4 text-sm text-blue-500 font-bold">Clique para revelar</span>
                             </div>
-                            <div class="flip-card-back p-6">
-                                <i data-lucide="check-circle" class="w-10 h-10 sm:w-12 sm:h-12 text-green-300 mb-4"></i>
-                                <h3 class="font-bold text-lg sm:text-xl text-center">MITO!</h3>
+                            <div class="flip-card-back">
+                                <i data-lucide="check-circle" class="w-12 h-12 text-green-300 mb-4"></i>
+                                <h3 class="font-bold text-xl text-center">MITO!</h3>
                                 <p class="mt-2 text-sm text-center">Sistemas modernos como o Linux Mint possuem interfaces lindas, idênticas ao Windows. Utiliza-se o rato para tudo!</p>
                             </div>
                         </div>
                     </button>
                     <button class="flip-card" onclick="this.classList.toggle('flipped')" aria-label="Revelar mito sobre vírus">
                         <div class="flip-card-inner">
-                            <div class="flip-card-front card p-6">
-                                <i data-lucide="shield-alert" class="w-10 h-10 sm:w-12 sm:h-12 text-slate-400 mb-4"></i>
-                                <h3 class="font-bold text-lg sm:text-xl text-center">"Mac e Linux nunca apanham vírus."</h3>
-                                <span class="mt-4 text-xs sm:text-sm text-blue-500 font-bold">Clique para revelar</span>
+                            <div class="flip-card-front card">
+                                <i data-lucide="shield-alert" class="w-12 h-12 text-slate-400 mb-4"></i>
+                                <h3 class="font-bold text-xl text-center">"Mac e Linux nunca apanham vírus."</h3>
+                                <span class="mt-4 text-sm text-blue-500 font-bold">Clique para revelar</span>
                             </div>
-                            <div class="flip-card-back p-6">
-                                <i data-lucide="alert-triangle" class="w-10 h-10 sm:w-12 sm:h-12 text-yellow-300 mb-4"></i>
-                                <h3 class="font-bold text-lg sm:text-xl text-center">MITO!</h3>
+                            <div class="flip-card-back">
+                                <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-300 mb-4"></i>
+                                <h3 class="font-bold text-xl text-center">MITO!</h3>
                                 <p class="mt-2 text-sm text-center">Eles apanham sim. Mas como a maioria das pessoas utiliza Windows em casa, os hackers criam 99% dos vírus especificamente para o Windows.</p>
                             </div>
                         </div>
                     </button>
                     <button class="flip-card" onclick="this.classList.toggle('flipped')" aria-label="Revelar mito sobre qualidade">
                         <div class="flip-card-inner">
-                            <div class="flip-card-front card p-6">
-                                <i data-lucide="frown" class="w-10 h-10 sm:w-12 sm:h-12 text-slate-400 mb-4"></i>
-                                <h3 class="font-bold text-lg sm:text-xl text-center">"Se é gratuito (Livre), deve ser mau."</h3>
-                                <span class="mt-4 text-xs sm:text-sm text-blue-500 font-bold">Clique para revelar</span>
+                            <div class="flip-card-front card">
+                                <i data-lucide="frown" class="w-12 h-12 text-slate-400 mb-4"></i>
+                                <h3 class="font-bold text-xl text-center">"Se é gratuito (Livre), deve ser mau."</h3>
+                                <span class="mt-4 text-sm text-blue-500 font-bold">Clique para revelar</span>
                             </div>
-                            <div class="flip-card-back p-6">
-                                <i data-lucide="globe" class="w-10 h-10 sm:w-12 sm:h-12 text-green-300 mb-4"></i>
-                                <h3 class="font-bold text-lg sm:text-xl text-center">MITO!</h3>
+                            <div class="flip-card-back">
+                                <i data-lucide="globe" class="w-12 h-12 text-green-300 mb-4"></i>
+                                <h3 class="font-bold text-xl text-center">MITO!</h3>
                                 <p class="mt-2 text-sm text-center">A NASA, a Netflix, a Google e o Android no seu bolso rodam em Linux. O software livre domina os servidores mundiais.</p>
                             </div>
                         </div>
@@ -275,10 +292,10 @@
             </section>
 
             <!-- Quiz Interativo Multipassos -->
-            <section class="bg-indigo-50 dark:bg-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-inner">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-4">O Novo Teste do "Chapéu Seletor"</h2>
-                <p class="mb-6 sm:mb-8 text-sm sm:text-base">Responda a 3 perguntas rápidas e descobriremos o seu Sistema Operacional ideal!</p>
-                <div id="quiz-container" aria-live="polite" class="bg-white dark:bg-slate-700 p-5 sm:p-10 rounded-2xl shadow-xl border border-indigo-100 dark:border-slate-600 max-w-3xl mx-auto transition-all w-full">
+            <section class="bg-indigo-50 dark:bg-slate-800 p-8 rounded-3xl text-center shadow-inner">
+                <h2 class="text-3xl font-bold mb-4">O Novo Teste do "Chapéu Seletor"</h2>
+                <p class="mb-8">Responda a 3 perguntas rápidas e descobriremos o seu Sistema Operacional ideal!</p>
+                <div id="quiz-container" aria-live="polite" class="bg-white dark:bg-slate-700 p-6 sm:p-10 rounded-2xl shadow-xl border border-indigo-100 dark:border-slate-600 max-w-3xl mx-auto transition-all">
                     <!-- O Quiz será renderizado aqui pelo JS -->
                 </div>
             </section>
@@ -287,29 +304,29 @@
         <!-- ========================================== -->
         <!-- PÁGINA 2: COMPARATIVO E CONCLUSÃO -->
         <!-- ========================================== -->
-        <div id="page-comparativo" class="page-section space-y-10 md:space-y-16">
+        <div id="page-comparativo" class="page-section space-y-16">
             
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Tabela -->
-                <div class="lg:w-2/3 w-full">
-                    <h2 class="text-2xl sm:text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="scale" class="w-7 h-7 sm:w-8 sm:h-8 text-blue-600"></i> O Grande Duelo</h2>
-                    <div class="overflow-x-auto rounded-xl shadow border border-slate-200 dark:border-slate-700 w-full">
-                        <table class="w-full text-left bg-white dark:bg-slate-800 border-collapse min-w-[600px]">
+                <div class="lg:w-2/3">
+                    <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="scale" class="w-8 h-8 text-blue-600"></i> O Grande Duelo</h2>
+                    <div class="overflow-x-auto rounded-xl shadow border border-slate-200 dark:border-slate-700">
+                        <table class="w-full text-left bg-white dark:bg-slate-800 border-collapse">
                             <thead>
-                                <tr class="bg-slate-800 dark:bg-black text-white text-sm sm:text-base">
-                                    <th class="p-3 sm:p-4 border-b border-slate-700">Critério</th>
-                                    <th class="p-3 sm:p-4 border-b border-slate-700 bg-emerald-700/80">Sistemas Livres</th>
-                                    <th class="p-3 sm:p-4 border-b border-slate-700 bg-rose-700/80">Sistemas Pagos</th>
+                                <tr class="bg-slate-800 dark:bg-black text-white">
+                                    <th class="p-4 border-b border-slate-700">Critério</th>
+                                    <th class="p-4 border-b border-slate-700 bg-emerald-700/80">Sistemas Livres</th>
+                                    <th class="p-4 border-b border-slate-700 bg-rose-700/80">Sistemas Pagos</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabela-corpo" class="text-sm sm:text-base">
+                            <tbody id="tabela-corpo">
                                 <!-- Preenchido via JS -->
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <!-- Gráficos -->
-                <div class="lg:w-1/3 w-full bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700">
+                <div class="lg:w-1/3 bg-white dark:bg-slate-800 p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700">
                     <h3 class="text-xl font-bold mb-6 text-center">Domínio de Mercado Real</h3>
                     <div class="flex flex-col items-center gap-8">
                         <div class="text-center">
@@ -327,36 +344,36 @@
             </div>
 
             <!-- Calculadora -->
-            <section class="bg-emerald-800 text-white p-6 sm:p-8 rounded-3xl text-center shadow-lg relative overflow-hidden">
-                <i data-lucide="calculator" class="w-48 h-48 sm:w-64 sm:h-64 absolute -top-10 -right-10 opacity-10"></i>
+            <section class="bg-emerald-800 text-white p-8 rounded-3xl text-center shadow-lg relative overflow-hidden">
+                <i data-lucide="calculator" class="w-64 h-64 absolute -top-10 -right-10 opacity-10"></i>
                 <div class="relative z-10">
-                    <h2 class="text-2xl sm:text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="piggy-bank" class="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400"></i> Calculadora de Impacto Financeiro</h2>
-                    <p class="mb-6 max-w-2xl mx-auto text-sm sm:text-base">Quanto uma empresa economiza em 3 anos usando Linux (Livre) em vez de comprar licenças do Windows + Antivírus (Média de 1.450€ / máquina)?</p>
-                    <div class="bg-black/20 p-5 sm:p-6 rounded-xl inline-block backdrop-blur-sm border border-emerald-600 w-full sm:w-auto">
+                    <h2 class="text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="piggy-bank" class="text-yellow-400"></i> Calculadora de Impacto Financeiro</h2>
+                    <p class="mb-6 max-w-2xl mx-auto">Quanto uma empresa economiza em 3 anos usando Linux (Livre) em vez de comprar licenças do Windows + Antivírus (Média de 1.450€ / máquina)?</p>
+                    <div class="bg-black/20 p-6 rounded-xl inline-block backdrop-blur-sm border border-emerald-600">
                         <label for="calc-pcs" class="block font-bold mb-3">Número de Computadores:</label>
-                        <div class="flex flex-col sm:flex-row gap-2 items-center justify-center">
-                            <input type="number" id="calc-pcs" value="10" min="1" class="w-full sm:w-24 text-black text-xl font-bold p-2 rounded outline-none focus:ring-4 focus:ring-yellow-400 text-center sm:text-left">
-                            <button onclick="calcularEconomia()" class="w-full sm:w-auto bg-yellow-400 text-emerald-900 font-bold px-6 py-2 rounded hover:bg-yellow-300 transition-colors shadow">Calcular</button>
+                        <div class="flex gap-2">
+                            <input type="number" id="calc-pcs" value="10" min="1" class="w-24 text-black text-xl font-bold p-2 rounded outline-none focus:ring-4 focus:ring-yellow-400">
+                            <button onclick="calcularEconomia()" class="bg-yellow-400 text-emerald-900 font-bold px-6 py-2 rounded hover:bg-yellow-300 transition-colors shadow">Calcular</button>
                         </div>
-                        <div id="calc-resultado" class="mt-4 text-xl sm:text-2xl font-black text-yellow-400 hidden" aria-live="polite"></div>
+                        <div id="calc-resultado" class="mt-4 text-2xl font-black text-yellow-400 hidden" aria-live="polite"></div>
                     </div>
                 </div>
             </section>
 
             <!-- Veredito -->
-            <section class="bg-blue-50 dark:bg-slate-800 p-6 sm:p-8 rounded-3xl">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center flex justify-center items-center gap-3"><i data-lucide="gavel" class="w-7 h-7 sm:w-8 sm:h-8 text-blue-600"></i> Veredito Académico</h2>
+            <section class="bg-blue-50 dark:bg-slate-800 p-8 rounded-3xl">
+                <h2 class="text-3xl font-bold mb-8 text-center"><i data-lucide="gavel" class="inline w-8 h-8 text-blue-600"></i> Veredito Académico</h2>
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-white dark:bg-slate-700 p-5 sm:p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
-                        <h3 class="font-bold text-base sm:text-lg mb-2 text-blue-800 dark:text-blue-300">Para uso Doméstico?</h3>
+                    <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
+                        <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300">Para uso Doméstico?</h3>
                         <p class="text-sm">O <strong>Windows</strong> é o rei da compatibilidade para jogos e softwares comuns. Mas o <strong>ChromeOS</strong> e <strong>Mint</strong> são perfeitos e gratuitos para ressuscitar computadores antigos onde o Windows é lento.</p>
                     </div>
-                    <div class="bg-white dark:bg-slate-700 p-5 sm:p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
-                        <h3 class="font-bold text-base sm:text-lg mb-2 text-blue-800 dark:text-blue-300">Para Empresas e Servidores?</h3>
+                    <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
+                        <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300">Para Empresas e Servidores?</h3>
                         <p class="text-sm">No escritório: Windows ou macOS devido ao pacote Office e Adobe. Nos <strong>Servidores</strong> de internet: Os sistemas livres (Linux) dominam pela segurança extrema e custo zero de licença.</p>
                     </div>
-                    <div class="bg-white dark:bg-slate-700 p-5 sm:p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
-                        <h3 class="font-bold text-base sm:text-lg mb-2 text-blue-800 dark:text-blue-300">Sistemas Livres podem substituir?</h3>
+                    <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
+                        <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300">Sistemas Livres podem substituir?</h3>
                         <p class="text-sm">Sim, e devem! Em governos, escolas e para programadores, o uso de Linux poupa milhões em dinheiro público e oferece o mesmo nível (ou superior) de qualidade.</p>
                     </div>
                 </div>
@@ -376,35 +393,35 @@
                 <!-- Imagem Windows -->
                 <div role="button" tabindex="0" onclick="openGalleryModal('windows')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-blue-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="monitor" class="text-blue-500 w-5 h-5"></i> Windows 11 (Pago)</h3>
-                    <img src="https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de ecrã do Windows 11" class="rounded-lg w-full h-40 sm:h-48 object-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Windows_11_logo.svg" alt="Símbolo do Windows 11" class="rounded-lg w-full h-40 sm:h-48 object-contain p-6 bg-slate-50 dark:bg-slate-900/50" onerror="this.src='https://via.placeholder.com/400x300?text=Windows+11'">
                     <p class="text-xs sm:text-sm mt-3 text-slate-600 dark:text-slate-400">Interface clássica e padrão do mercado. Focada em uso familiar.</p>
                 </div>
                 
                 <!-- Imagem Linux Ubuntu -->
                 <div role="button" tabindex="0" onclick="openGalleryModal('ubuntu')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-orange-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="layout-dashboard" class="text-orange-500 w-5 h-5"></i> Ubuntu (Livre)</h3>
-                    <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de ecrã de um ambiente Linux moderno" class="rounded-lg w-full h-40 sm:h-48 object-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" alt="Símbolo do Ubuntu" class="rounded-lg w-full h-40 sm:h-48 object-contain p-6 bg-slate-50 dark:bg-slate-900/50" onerror="this.src='https://via.placeholder.com/400x300?text=Ubuntu'">
                     <p class="text-xs sm:text-sm mt-3 text-slate-600 dark:text-slate-400">Interface GNOME, fluida, segura e super personalizável. A favorita dos devs.</p>
                 </div>
                 
                 <!-- Imagem macOS -->
                 <div role="button" tabindex="0" onclick="openGalleryModal('macos')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-slate-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="apple" class="text-slate-700 dark:text-slate-200 w-5 h-5"></i> macOS (Pago)</h3>
-                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de ecrã do macOS da Apple" class="rounded-lg w-full h-40 sm:h-48 object-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Símbolo da Apple macOS" class="rounded-lg w-full h-40 sm:h-48 object-contain p-8 bg-slate-50 dark:bg-slate-900/50 dark:invert opacity-80" onerror="this.src='https://via.placeholder.com/400x300?text=macOS'">
                     <p class="text-xs sm:text-sm mt-3 text-slate-600 dark:text-slate-400">Exclusiva da Apple. Foco extremo em design, animações fluidas e estabilidade.</p>
                 </div>
 
                 <!-- Imagem Linux Mint -->
                 <div role="button" tabindex="0" onclick="openGalleryModal('mint')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-green-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="leaf" class="text-green-500 w-5 h-5"></i> Linux Mint (Livre)</h3>
-                    <img src="https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80" alt="Ambiente de desenvolvimento limpo representando o Linux Mint" class="rounded-lg w-full h-40 sm:h-48 object-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Linux_Mint_logo_without_wordmark.svg" alt="Símbolo do Linux Mint" class="rounded-lg w-full h-40 sm:h-48 object-contain p-6 bg-slate-50 dark:bg-slate-900/50" onerror="this.src='https://via.placeholder.com/400x300?text=Linux+Mint'">
                     <p class="text-xs sm:text-sm mt-3 text-slate-600 dark:text-slate-400">A porta de entrada ideal. O design simula o menu iniciar do Windows.</p>
                 </div>
 
                 <!-- Imagem ChromeOS -->
                 <div role="button" tabindex="0" onclick="openGalleryModal('chromeos')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-yellow-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="chrome" class="text-yellow-500 w-5 h-5"></i> ChromeOS Flex</h3>
-                    <img src="https://images.unsplash.com/photo-1589739900266-43b2843f4c12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Notebook básico representando ChromeOS" class="rounded-lg w-full h-40 sm:h-48 object-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Chrome_OS_logo.svg" alt="Símbolo do ChromeOS" class="rounded-lg w-full h-40 sm:h-48 object-contain p-6 bg-slate-50 dark:bg-slate-900/50" onerror="this.src='https://via.placeholder.com/400x300?text=ChromeOS'">
                     <p class="text-xs sm:text-sm mt-3 text-slate-600 dark:text-slate-400">Voltado 100% para internet. Revive portáteis antigos perfeitamente em escolas.</p>
                 </div>
             </div>
@@ -416,7 +433,9 @@
                 <button id="close-modal-btn" onclick="closeGalleryModal()" class="absolute top-4 right-4 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition z-10 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Fechar Modal">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
-                <img id="modal-img" src="" alt="Imagem do Sistema" class="w-full h-48 sm:h-64 object-cover">
+                <div class="bg-slate-50 dark:bg-slate-900/50 p-8 border-b border-slate-200 dark:border-slate-700">
+                    <img id="modal-img" src="" alt="Símbolo do Sistema" class="w-full h-32 sm:h-48 object-contain">
+                </div>
                 <div class="p-5 sm:p-8">
                     <h3 id="modal-title" class="text-xl sm:text-2xl font-black text-slate-800 dark:text-white mb-3 flex items-center gap-2 sm:gap-3"></h3>
                     <div id="modal-badges" class="flex flex-wrap gap-2 mb-4"></div>
@@ -432,57 +451,101 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- PÁGINA 4: SIMULADOR DE TERMINAL DUPLO -->
+        <!-- PÁGINA 4: SIMULADOR DE TERMINAL E DESKTOP -->
         <!-- ========================================== -->
-        <div id="page-simulador" class="page-section">
-            <div class="text-center mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="terminal-square" class="w-7 h-7 sm:w-8 sm:h-8 text-blue-600"></i> O Laboratório de Terminais</h2>
-                <p class="text-sm sm:text-base">Teste e veja as diferenças entre a administração de sistemas abertos vs fechados.</p>
+        <div id="page-simulador" class="page-section space-y-12">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="monitor-play" class="w-7 h-7 sm:w-8 sm:h-8 text-blue-600"></i> Laboratório Virtual</h2>
+                <p class="text-sm sm:text-base px-4">Experimente as interfaces gráficas e os terminais de comandos dos principais sistemas operativos.</p>
+            </div>
+
+            <!-- SIMULADOR DE DESKTOP -->
+            <div class="max-w-5xl mx-auto px-2">
+                <h3 class="text-xl font-bold mb-6 text-center text-slate-700 dark:text-slate-300"><i data-lucide="layout" class="inline w-5 h-5 mr-2"></i> 1. Simulador de Ambiente de Trabalho</h3>
+                
+                <!-- Controlos do Simulador Desktop -->
+                <div class="flex justify-center flex-wrap gap-2 sm:gap-3 mb-6">
+                    <button onclick="changeDesktopOS('win')" class="px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 transition font-bold flex items-center gap-2 outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"><i data-lucide="monitor" class="w-4 h-4"></i> Windows 11</button>
+                    <button onclick="changeDesktopOS('ubuntu')" class="px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm hover:bg-orange-500 hover:text-white dark:hover:bg-orange-600 transition font-bold flex items-center gap-2 outline-none focus:ring-2 focus:ring-orange-400 text-sm sm:text-base"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Ubuntu</button>
+                    <button onclick="changeDesktopOS('macos')" class="px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm hover:bg-slate-700 hover:text-white dark:hover:bg-slate-600 transition font-bold flex items-center gap-2 outline-none focus:ring-2 focus:ring-slate-400 text-sm sm:text-base"><i data-lucide="apple" class="w-4 h-4"></i> macOS</button>
+                    <button onclick="changeDesktopOS('mint')" class="px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm hover:bg-green-600 hover:text-white dark:hover:bg-green-600 transition font-bold flex items-center gap-2 outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"><i data-lucide="leaf" class="w-4 h-4"></i> Linux Mint</button>
+                </div>
+
+                <!-- Moldura do Monitor -->
+                <div class="border-[8px] sm:border-[16px] border-slate-800 dark:border-black rounded-t-2xl sm:rounded-t-3xl shadow-2xl relative">
+                    <!-- Ecrã -->
+                    <div id="desktopDisplay" class="desktop-preview bg-blue-600 rounded-sm">
+                        <!-- Taskbar / Dock -->
+                        <div id="taskbar" class="taskbar flex justify-center bg-white/20">
+                            <!-- Ícones -->
+                        </div>
+                    </div>
+                </div>
+                <div class="max-w-xs mx-auto h-4 sm:h-6 bg-slate-800 dark:bg-black rounded-b-xl"></div>
+                <div class="max-w-[120px] sm:max-w-[180px] mx-auto h-2 sm:h-3 bg-slate-700 dark:bg-slate-900 rounded-b-xl"></div>
             </div>
 
             <!-- UI do Terminal -->
-            <div class="max-w-4xl mx-auto bg-black rounded-xl shadow-2xl border border-slate-700 overflow-hidden font-mono text-xs sm:text-sm mb-6 w-full">
-                <!-- Abas de OS -->
-                <div class="bg-slate-800 flex">
-                    <button id="tab-linux" onclick="switchTerminal('linux')" class="flex-1 py-3 px-2 sm:px-4 text-center font-bold bg-slate-700 text-white border-t-2 border-orange-500 flex justify-center items-center gap-1 sm:gap-2 transition focus:outline-none focus:bg-slate-600"><i data-lucide="cpu" class="w-4 h-4"></i> <span class="hidden sm:inline">Ubuntu</span>(Linux)</button>
-                    <button id="tab-win" onclick="switchTerminal('windows')" class="flex-1 py-3 px-2 sm:px-4 text-center font-bold text-slate-400 hover:text-white hover:bg-slate-700 flex justify-center items-center gap-1 sm:gap-2 transition focus:outline-none focus:bg-slate-700"><i data-lucide="monitor" class="w-4 h-4"></i> <span class="hidden sm:inline">Windows</span> CMD</button>
-                </div>
+            <div class="max-w-5xl mx-auto pt-8 px-2">
+                <h3 class="text-xl font-bold mb-6 text-center text-slate-700 dark:text-slate-300"><i data-lucide="terminal" class="inline w-5 h-5 mr-2"></i> 2. Simulador de Terminais (Tríplice)</h3>
                 
-                <!-- Tela Preta -->
-                <div class="p-3 sm:p-4 h-64 sm:h-72 overflow-y-auto bg-black text-green-400 break-words" id="term-output" onclick="document.getElementById('term-input').focus()">
-                    <div>Welcome to Ubuntu 22.04 LTS (GNU/Linux).</div>
-                    <div class="text-slate-400 text-[10px] sm:text-xs mb-4">Simulador Didático TCC. Tente um comando da lista abaixo.</div>
+                <div class="bg-black rounded-xl shadow-2xl border border-slate-700 overflow-hidden font-mono text-xs sm:text-sm mb-6 w-full">
+                    <!-- Abas de OS -->
+                    <div class="bg-slate-800 flex overflow-x-auto scrollbar-hide">
+                        <button id="tab-linux" onclick="switchTerminal('linux')" class="flex-1 min-w-[120px] py-3 px-2 sm:px-4 text-center font-bold bg-slate-700 text-white border-t-2 border-orange-500 flex justify-center items-center gap-1 sm:gap-2 transition focus:outline-none focus:bg-slate-600"><i data-lucide="cpu" class="w-4 h-4"></i> <span class="hidden sm:inline">Ubuntu</span></button>
+                        <button id="tab-win" onclick="switchTerminal('windows')" class="flex-1 min-w-[120px] py-3 px-2 sm:px-4 text-center font-bold text-slate-400 hover:text-white hover:bg-slate-700 flex justify-center items-center gap-1 sm:gap-2 transition focus:outline-none focus:bg-slate-700"><i data-lucide="monitor" class="w-4 h-4"></i> <span class="hidden sm:inline">Windows</span></button>
+                        <button id="tab-macos" onclick="switchTerminal('macos')" class="flex-1 min-w-[120px] py-3 px-2 sm:px-4 text-center font-bold text-slate-400 hover:text-white hover:bg-slate-700 flex justify-center items-center gap-1 sm:gap-2 transition focus:outline-none focus:bg-slate-700"><i data-lucide="apple" class="w-4 h-4"></i> <span class="hidden sm:inline">macOS</span></button>
+                    </div>
+                    
+                    <!-- Tela Preta -->
+                    <div class="p-3 sm:p-4 h-64 sm:h-72 overflow-y-auto bg-black text-green-400 break-words" id="term-output" onclick="document.getElementById('term-input').focus()">
+                        <div>Welcome to Ubuntu 22.04 LTS (GNU/Linux).</div>
+                        <div class="text-slate-400 text-[10px] sm:text-xs mb-4">Simulador Didático TCC. Tente um comando da lista abaixo.</div>
+                    </div>
+
+                    <!-- Input -->
+                    <div class="flex items-center bg-black px-3 sm:px-4 pb-4">
+                        <span id="term-prompt" class="text-green-400 font-bold mr-2 whitespace-nowrap">admin@ubuntu:~$</span>
+                        <input type="text" id="term-input" class="flex-1 bg-transparent text-white outline-none caret-transparent w-full" autocomplete="off" spellcheck="false" aria-label="Linha de comando do terminal">
+                        <span class="term-cursor shrink-0"></span>
+                    </div>
                 </div>
 
-                <!-- Input -->
-                <div class="flex items-center bg-black px-3 sm:px-4 pb-4">
-                    <span id="term-prompt" class="text-green-400 font-bold mr-2 whitespace-nowrap">admin@ubuntu:~$</span>
-                    <input type="text" id="term-input" class="flex-1 bg-transparent text-white outline-none caret-transparent w-full" autocomplete="off" spellcheck="false" aria-label="Linha de comando do terminal">
-                    <span class="term-cursor shrink-0"></span>
-                </div>
-            </div>
-
-            <!-- Cheat Sheet (Comandos Principais) -->
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-orange-950/20 dark:bg-slate-800 border border-orange-200 dark:border-slate-700 p-4 sm:p-5 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-orange-600 dark:text-orange-400 mb-3 flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> Comandos Linux</h3>
-                    <ul class="text-xs sm:text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300 break-words">
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ls</code> : Listar ficheiros</li>
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">pwd</code> : Mostrar pasta atual</li>
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ifconfig</code> : Dados de rede/IP</li>
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">whoami</code> : Utilizador ligado</li>
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">clear</code> : Limpar ecrã</li>
-                    </ul>
-                </div>
-                <div class="bg-blue-950/10 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 p-4 sm:p-5 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2"><i data-lucide="monitor" class="w-4 h-4"></i> Comandos Windows</h3>
-                    <ul class="text-xs sm:text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300 break-words">
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">dir</code> : Listar ficheiros</li>
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cd</code> : Mostrar pasta atual</li>
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">ipconfig</code> : Dados de rede/IP</li>
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">whoami</code> : Utilizador ligado</li>
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cls</code> : Limpar ecrã</li>
-                    </ul>
+                <!-- Cheat Sheet (Comandos Principais) - 3 Colunas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Linux -->
+                    <div class="bg-orange-950/20 dark:bg-slate-800 border border-orange-200 dark:border-slate-700 p-4 rounded-xl shadow-sm">
+                        <h3 class="font-bold text-orange-600 dark:text-orange-400 mb-3 flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> Linux</h3>
+                        <ul class="text-xs sm:text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300 break-words">
+                            <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ls</code> : Listar ficheiros</li>
+                            <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">pwd</code> : Pasta atual</li>
+                            <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ifconfig / ip a</code> : Rede</li>
+                            <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">whoami</code> : Utilizador</li>
+                            <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">clear</code> : Limpar ecrã</li>
+                        </ul>
+                    </div>
+                    <!-- Windows -->
+                    <div class="bg-blue-950/10 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 p-4 rounded-xl shadow-sm">
+                        <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2"><i data-lucide="monitor" class="w-4 h-4"></i> Windows</h3>
+                        <ul class="text-xs sm:text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300 break-words">
+                            <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">dir</code> : Listar ficheiros</li>
+                            <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cd</code> : Pasta atual</li>
+                            <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">ipconfig</code> : Rede</li>
+                            <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">whoami</code> : Utilizador</li>
+                            <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cls</code> : Limpar ecrã</li>
+                        </ul>
+                    </div>
+                    <!-- macOS -->
+                    <div class="bg-slate-200/50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 p-4 rounded-xl shadow-sm">
+                        <h3 class="font-bold text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2"><i data-lucide="apple" class="w-4 h-4"></i> macOS</h3>
+                        <ul class="text-xs sm:text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300 break-words">
+                            <li><code class="bg-slate-300 dark:bg-slate-900 px-1 py-0.5 rounded text-slate-800 dark:text-slate-300 font-bold">ls -la</code> : Lista detalhada</li>
+                            <li><code class="bg-slate-300 dark:bg-slate-900 px-1 py-0.5 rounded text-slate-800 dark:text-slate-300 font-bold">pwd</code> : Pasta atual</li>
+                            <li><code class="bg-slate-300 dark:bg-slate-900 px-1 py-0.5 rounded text-slate-800 dark:text-slate-300 font-bold">ifconfig</code> : Rede</li>
+                            <li><code class="bg-slate-300 dark:bg-slate-900 px-1 py-0.5 rounded text-slate-800 dark:text-slate-300 font-bold">whoami</code> : Utilizador</li>
+                            <li><code class="bg-slate-300 dark:bg-slate-900 px-1 py-0.5 rounded text-slate-800 dark:text-slate-300 font-bold">clear</code> : Limpar ecrã</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -491,39 +554,38 @@
         <!-- PÁGINA 5: PLAYGROUND DE IA (PROMPTS) -->
         <!-- ========================================== -->
         <div id="page-ia" class="page-section">
-            <div class="text-center mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="bot" class="w-7 h-7 sm:w-8 sm:h-8 text-blue-600"></i> O Assistente "Revelador"</h2>
-                <p class="text-sm sm:text-base px-2">Nesta demonstração, a IA responde <strong>exclusivamente</strong> aos prompts do TCC, explicando como cada parte do site foi programada.</p>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold mb-4"><i data-lucide="bot" class="inline w-8 h-8 text-blue-600"></i> O Assistente "Revelador de Código"</h2>
+                <p>Nesta demonstração, a IA responde <strong>exclusivamente</strong> aos prompts do TCC, explicando como cada parte do site foi programada.</p>
             </div>
 
-            <div class="max-w-4xl mx-auto flex flex-col h-[500px] sm:h-[550px] border border-slate-300 dark:border-slate-700 rounded-xl shadow-lg bg-white dark:bg-slate-800 overflow-hidden mb-12 w-full">
+            <div class="max-w-4xl mx-auto flex flex-col h-[550px] border border-slate-300 dark:border-slate-700 rounded-xl shadow-lg bg-white dark:bg-slate-800 overflow-hidden mb-12">
                 <!-- Chat Area -->
-                <div id="chat-box" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 bg-slate-50 dark:bg-slate-900" aria-live="polite">
-                    <div class="flex gap-2 sm:gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-md"><i data-lucide="bot" class="w-5 h-5"></i></div>
-                        <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-sm max-w-[85%] leading-relaxed">
+                <div id="chat-box" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50 dark:bg-slate-900" aria-live="polite">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
+                        <div class="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 text-sm max-w-[85%] leading-relaxed">
                             Olá! Sou a IA Assistente do TCC. Clique numa das sugestões de prompt abaixo ou digite os comandos do relatório para eu explicar como gerei o código do site.
                         </div>
                     </div>
                 </div>
                 <!-- Input Area -->
-                <div class="p-3 sm:p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
-                    <!-- Scroll horizontal para os botões de sugestão no mobile -->
-                    <div class="flex flex-nowrap md:flex-wrap gap-2 mb-3 overflow-x-auto scrollbar-hide pb-1">
-                        <button onclick="enviarChat('Atue como um especialista em acessibilidade web. Gere a estrutura HTML garantindo suporte a leitores de tela e controle por teclado.')" class="shrink-0 text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition">Acessibilidade HTML</button>
-                        <button onclick="enviarChat('Crie um quiz interativo multipassos (\'Teste do Chapéu Seletor\') com JS para indicar o melhor Sistema Operacional com base no perfil do usuário leigo.')" class="shrink-0 text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition">Quiz Interativo JS</button>
-                        <button onclick="enviarChat('Escreva uma Calculadora de Economia em JavaScript que mostre o custo corporativo de licenças do Windows vs Linux ao longo de 3 anos.')" class="shrink-0 text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition">Calculadora de Custos</button>
+                <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <button onclick="enviarChat('Atue como um especialista em acessibilidade web. Gere a estrutura HTML garantindo suporte a leitores de tela e controle por teclado.')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition truncate max-w-[200px]">Acessibilidade HTML</button>
+                        <button onclick="enviarChat('Crie um quiz interativo multipassos (\'Teste do Chapéu Seletor\') com JS para indicar o melhor Sistema Operacional com base no perfil do usuário leigo.')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition truncate max-w-[200px]">Quiz Interativo JS</button>
+                        <button onclick="enviarChat('Escreva uma Calculadora de Economia em JavaScript que mostre o custo corporativo de licenças do Windows vs Linux ao longo de 3 anos.')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition truncate max-w-[200px]">Calculadora de Custos</button>
                     </div>
                     <form onsubmit="handleChatSubmit(event)" class="flex gap-2">
-                        <input type="text" id="chat-input" placeholder="Cole o prompt do TCC aqui..." class="flex-1 w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 sm:px-4 py-2 sm:py-3 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none text-sm sm:text-base" required>
-                        <button type="submit" class="bg-blue-600 text-white px-4 sm:px-5 py-2 rounded-lg hover:bg-blue-700 transition font-bold flex items-center gap-2"><span class="hidden sm:inline">Enviar</span> <i data-lucide="send" class="w-4 h-4"></i></button>
+                        <input type="text" id="chat-input" placeholder="Cole um dos prompts utilizados no TCC aqui..." class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                        <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition font-bold flex items-center gap-2"><span class="hidden sm:inline">Enviar</span> <i data-lucide="send" class="w-4 h-4"></i></button>
                     </form>
                 </div>
             </div>
 
             <!-- EXIGÊNCIA DO PROFESSOR: Lista de Prompts Utilizados -->
-            <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700">
-                <h3 class="text-xl sm:text-2xl font-bold mb-6 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4"><i data-lucide="list-checks" class="text-blue-500 w-6 h-6 sm:w-8 sm:h-8"></i> Relatório de Transparência (Prompts)</h3>
+            <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4"><i data-lucide="list-checks" class="text-blue-500"></i> Relatório de Transparência (Prompts Usados)</h3>
                 <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Em cumprimento aos requisitos do TCC, os comandos exatos enviados à inteligência artificial para o desenvolvimento deste projeto estão catalogados abaixo:</p>
                 <ul id="lista-prompts" class="space-y-3">
                     <!-- Gerados via JS -->
@@ -535,30 +597,30 @@
         <!-- PÁGINA 6: REFERÊNCIAS BIBLIOGRÁFICAS       -->
         <!-- ========================================== -->
         <div id="page-referencias" class="page-section">
-            <div class="text-center mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="book-marked" class="w-7 h-7 sm:w-8 sm:h-8 text-blue-600"></i> Referências Bibliográficas</h2>
-                <p class="text-sm sm:text-base px-2">Fundamentação teórica e fontes fidedignas utilizadas na construção deste Trabalho de Conclusão de Curso.</p>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold mb-4"><i data-lucide="book-marked" class="inline w-8 h-8 text-blue-600"></i> Referências Bibliográficas</h2>
+                <p>Fundamentação teórica e fontes fidedignas utilizadas na construção deste Trabalho de Conclusão de Curso.</p>
             </div>
             
-            <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden break-words">
-                <ul class="space-y-6 text-sm sm:text-base text-slate-700 dark:text-slate-300">
+            <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-2xl shadow border border-slate-200 dark:border-slate-700">
+                <ul class="space-y-6 text-slate-700 dark:text-slate-300">
                     <li class="pl-4 border-l-4 border-blue-500">
-                        <strong>SILBERSCHATZ, Abraham; GALVIN, Peter Baer; GAGNE, Greg.</strong> <em class="break-words">Sistemas Operativos com Java</em>. 8ª Edição. Rio de Janeiro: Elsevier, 2010.
+                        <strong>SILBERSCHATZ, Abraham; GALVIN, Peter Baer; GAGNE, Greg.</strong> <em>Sistemas Operativos com Java</em>. 8ª Edição. Rio de Janeiro: Elsevier, 2010.
                     </li>
                     <li class="pl-4 border-l-4 border-orange-500">
                         <strong>TANENBAUM, Andrew S.</strong> <em>Sistemas Operativos Modernos</em>. 3ª Edição. São Paulo: Pearson Prentice Hall, 2010.
                     </li>
                     <li class="pl-4 border-l-4 border-green-500">
-                        <strong>STALLMAN, Richard.</strong> <em>O Projeto GNU e o Movimento do Software Livre</em>. Disponível em: <a href="https://www.gnu.org" target="_blank" class="text-blue-500 hover:underline break-all">www.gnu.org</a>. Acesso em: Mai. 2026.
+                        <strong>STALLMAN, Richard.</strong> <em>O Projeto GNU e o Movimento do Software Livre</em>. Disponível em: <a href="https://www.gnu.org" target="_blank" class="text-blue-500 hover:underline">www.gnu.org</a>. Acesso em: Mai. 2026.
                     </li>
                     <li class="pl-4 border-l-4 border-slate-500">
-                        <strong>MICROSOFT.</strong> <em>Documentação Oficial do Windows 11 e Windows Server</em>. Disponível em: <a href="https://learn.microsoft.com/windows" target="_blank" class="text-blue-500 hover:underline break-all">learn.microsoft.com/windows</a>. Acesso em: Mai. 2026.
+                        <strong>MICROSOFT.</strong> <em>Documentação Oficial do Windows 11 e Windows Server</em>. Disponível em: <a href="https://learn.microsoft.com/windows" target="_blank" class="text-blue-500 hover:underline">learn.microsoft.com</a>. Acesso em: Mai. 2026.
                     </li>
                     <li class="pl-4 border-l-4 border-purple-500">
-                        <strong>W3C (World Wide Web Consortium).</strong> <em>Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.1</em>. Disponível em: <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" class="text-blue-500 hover:underline break-all">w3.org/WAI</a>. Acesso em: Mai. 2026.
+                        <strong>W3C (World Wide Web Consortium).</strong> <em>Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.1</em>. Disponível em: <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" class="text-blue-500 hover:underline">w3.org/WAI</a>. Acesso em: Mai. 2026.
                     </li>
                     <li class="pl-4 border-l-4 border-red-500">
-                        <strong>LINUX FOUNDATION.</strong> <em>O Impacto do Software Livre em Ambientes Corporativos</em>. Disponível em: <a href="https://www.linuxfoundation.org/" target="_blank" class="text-blue-500 hover:underline break-all">linuxfoundation.org</a>. Acesso em: Mai. 2026.
+                        <strong>LINUX FOUNDATION.</strong> <em>O Impacto do Software Livre em Ambientes Corporativos</em>. Disponível em: <a href="https://www.linuxfoundation.org/" target="_blank" class="text-blue-500 hover:underline">linuxfoundation.org</a>. Acesso em: Mai. 2026.
                     </li>
                 </ul>
             </div>
@@ -572,9 +634,9 @@
     </button>
 
     <!-- FOOTER E WIDGET VLIBRAS -->
-    <footer class="bg-slate-900 text-slate-400 py-6 sm:py-8 text-center border-t border-slate-800 px-4">
-        <p class="text-xs sm:text-sm">Desenvolvido para fins educacionais - Atividade TCC Sistemas Operacionais</p>
-        <p class="text-xs sm:text-sm mt-2 text-yellow-500 flex justify-center items-center gap-1 sm:gap-2 flex-wrap"><i data-lucide="shield-check" class="w-4 h-4 shrink-0"></i> Padrão de Acessibilidade Extrema WCAG AAA Aplicado.</p>
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center border-t border-slate-800">
+        <p>Desenvolvido para fins educacionais - Atividade TCC Sistemas Operacionais</p>
+        <p class="text-sm mt-2 text-yellow-500 flex justify-center items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Padrão de Acessibilidade Extrema WCAG AAA Aplicado.</p>
     </footer>
 
     <!-- VLibras Widget -->
@@ -645,13 +707,22 @@
         });
 
         const promptsTCC = [
-            "Atue como um especialista em acessibilidade web. Gere a estrutura HTML garantindo suporte a leitores de tela e controle por teclado.",
-            "Crie um quiz interativo multipassos ('Teste do Chapéu Seletor') com JS para indicar o melhor Sistema Operacional com base no perfil do usuário leigo.",
-            "Escreva uma Calculadora de Economia em JavaScript que mostre o custo corporativo de licenças do Windows vs Linux ao longo de 3 anos.",
-            "Crie uma simulação funcional de terminal duplo (Linux Ubuntu vs Windows CMD) e um 'Cheat Sheet' com os principais comandos.",
-            "Traduza a diferença entre 'Código Aberto' e 'Código Fechado' usando a metáfora de uma Cozinha de Restaurante vs Cozinha Comunitária.",
-            "Adicione transições CSS puras para um Dark Mode (Modo Escuro) suave e uma SPA (Single Page Application) sem recarregar a página."
+            "Vamos melhorar mais, coloque um dark mode, mais paginas, mais acessibilidades... adicione um simulador do terminal do linux e do windows.",
+            "Adicione mais perguntas ao quiz, no botao de vlibras coloque um icone para surdo, mais imagens para a galeria de interfaces.",
+            "Na ia que criamos, ao inves de responder qualquer pergunta ela deve responder so os prompts utilizaveis por mim, so pra pessoa ver como esse projeto foi feito.",
+            "Na galeria virtual, quero adicionar que quando a pessoa apertar em algum da galeria abre um modal com alguma explicacao mais detalhada.",
+            "Lembrando que a maioria das pessoas que iriam usar o site, nao possuem conhecimento tecnico. (Adaptação para linguagem leiga e analogia dos carros).",
+            "Quero adicionar isso: 1. Persistência de Preferências (LocalStorage) 2. Referências Bibliográficas 3. Gestão de Foco no Modal 4. Botão Voltar ao Topo.",
+            "Na parte 'A Voz dos Utilizadores' eu gostaria que estivesse a opniao de alguem que realmente exista, como Bill Gates, Elon Musk e Steve Jobs.",
+            "Faça a responsividade para celular.",
+            "E se o mudo tiver braço como funcionara a acessibilidade? e se o mudo nao tiver braço como funcionara a acessibilidade? (Discussão sobre Eye Tracking e hardware assistivo).",
+            "Quero deixar 200% e outra coisa esse projeto possui todo o conteudo abaixo, do que ele precisa ter? [Análise e validação do roteiro completo do TCC com os 12 critérios].",
+            "Na galeria visual: coloque a imagem do simbolo oficial de cada sistema operacional (windows 11, ubuntu, etc).",
+            "Crie uma simulação funcional de terminal triplo (Linux Ubuntu vs Windows CMD vs macOS) e um 'Cheat Sheet' com os principais comandos.",
+            "Fazer uma simulaçao funcional de desktop visual (windows vs ubuntu vs MacOS vs linux mint).",
+            "Na pagina IA prompts: na parte Relatório de Transparência (Prompts Usados) eu preciso adicionar todos os prompts q eu utilizei para fazer todo o projeto."
         ];
+        
         const promptList = document.getElementById('lista-prompts');
         promptsTCC.forEach(p => {
             promptList.innerHTML += `<li class="bg-slate-50 dark:bg-slate-900 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs sm:text-sm text-slate-700 dark:text-slate-300 shadow-sm flex items-start gap-2 sm:gap-3"><i data-lucide="terminal" class="w-4 h-4 mt-0.5 text-blue-500 shrink-0"></i> <span>${p}</span></li>`;
@@ -669,18 +740,21 @@
         function toggleDarkMode() { 
             const html = document.documentElement;
             html.classList.toggle('dark'); 
+            // Guarda preferência
             localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
         }
         
         function toggleHighContrast() { 
             const body = document.body;
             body.classList.toggle('high-contrast'); 
+            // Guarda preferência
             localStorage.setItem('contrast', body.classList.contains('high-contrast') ? 'high' : 'normal');
         }
 
         function toggleDyslexicFont() {
             const html = document.documentElement;
             html.classList.toggle('font-dyslexic');
+            // Guarda preferência
             localStorage.setItem('dyslexic', html.classList.contains('font-dyslexic') ? 'true' : 'false');
         }
         
@@ -719,6 +793,7 @@
             }
         }
 
+        // Verifica Redução de Animações do Utilizador
         function prefersReducedMotion() {
             return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         }
@@ -730,35 +805,35 @@
             'windows': {
                 title: 'Microsoft Windows 11',
                 icon: 'monitor',
-                img: 'https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Windows_11_logo.svg',
                 badges: ['Pago', 'Código Fechado', 'Foco em Jogos'],
                 desc: 'O Windows 11 apresenta uma interface centralizada e limpa. É o sistema mais utilizado no mundo em computadores pessoais. A sua principal força é a compatibilidade: quase qualquer programa ou jogo feito para PC funcionará aqui. No entanto, o seu código é trancado a sete chaves (proprietário) e exige hardware cada vez mais recente e poderoso para funcionar perfeitamente.'
             },
             'ubuntu': {
                 title: 'Ubuntu (Linux)',
                 icon: 'layout-dashboard',
-                img: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg',
                 badges: ['Gratuito', 'Código Aberto', 'Foco em Programação'],
                 desc: 'O Ubuntu utiliza uma interface moderna e intuitiva chamada GNOME. Diferente do mito do "ecrã preto", ele possui uma loja de aplicações visual fácil de usar. É a escolha de eleição dos programadores, pois oferece um ambiente de desenvolvimento idêntico ao dos servidores web (Cloud), garantindo estabilidade incrível e imunidade contra os vírus mais comuns.'
             },
             'macos': {
                 title: 'Apple macOS',
                 icon: 'apple',
-                img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
                 badges: ['Pago', 'Proprietário', 'Foco em Design'],
                 desc: 'O macOS é o sistema operativo exclusivo dos computadores Mac da Apple. É amplamente reconhecido no mercado pelo seu design polido, ecossistema integrado (onde tudo funciona perfeitamente com iPhone e iPad) e estabilidade robusta. É a plataforma padrão na indústria de design gráfico, edição de vídeo e produção musical. O lado negativo é o seu custo de entrada altíssimo.'
             },
             'mint': {
                 title: 'Linux Mint',
                 icon: 'leaf',
-                img: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Linux_Mint_logo_without_wordmark.svg',
                 badges: ['Gratuito', 'Código Aberto', 'Ideal para Iniciantes'],
                 desc: 'Se o utilizador quer abandonar o Windows mas não tem vontade de reaprender a usar o PC, o Linux Mint é a melhor recomendação global. A sua interface (Cinnamon) simula o comportamento clássico com um menu iniciar no canto, barra de tarefas e ícones no ambiente de trabalho. Além disso, consome pouquíssimos recursos e é formidável a reavivar portáteis lentos e antigos.'
             },
             'chromeos': {
                 title: 'ChromeOS Flex',
                 icon: 'chrome',
-                img: 'https://images.unsplash.com/photo-1589739900266-43b2843f4c12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Chrome_OS_logo.svg',
                 badges: ['Gratuito', 'Base Linux', 'Foco Web e Estudantes'],
                 desc: 'Desenvolvido pela Google, o ChromeOS converte, basicamente, qualquer computador num "Navegador Chrome Gigante". Tendo em conta que, atualmente, a grande maioria dos estudos e trabalhos ocorre 100% na Web (Google Docs, YouTube, Redes Sociais), trata-se de um sistema incrivelmente eficaz. Tem um arranque de segundos e não exige manutenções ou antivírus complexos.'
             }
@@ -771,18 +846,29 @@
             const data = galleryData[osKey];
             if(!data) return;
 
+            // Guarda o elemento atual para devolver o foco ao fechar
             lastFocusedElement = document.activeElement;
 
-            document.getElementById('modal-img').src = data.img;
+            const modalImg = document.getElementById('modal-img');
+            modalImg.src = data.img;
+            
+            // Inverte o logótipo da Apple no modal se estiver em Modo Escuro
+            if(osKey === 'macos') {
+                modalImg.classList.add('dark:invert', 'opacity-80');
+            } else {
+                modalImg.classList.remove('dark:invert', 'opacity-80');
+            }
+
             document.getElementById('modal-title').innerHTML = `<i data-lucide="${data.icon}" class="w-6 h-6 sm:w-8 sm:h-8"></i> ${data.title}`;
             document.getElementById('modal-desc').innerHTML = data.desc;
             
-            const badgesHtml = data.badges.map(b => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded font-bold uppercase tracking-wider">${b}</span>`).join('');
+            const badgesHtml = data.badges.map(b => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-3 py-1 rounded font-bold uppercase tracking-wider">${b}</span>`).join('');
             document.getElementById('modal-badges').innerHTML = badgesHtml;
 
             const modal = document.getElementById('gallery-modal');
             modal.classList.remove('hidden');
             
+            // Permite que o ecrã desenhe o elemento como "block" antes de animar a opacidade
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modal.children[0].classList.remove('scale-95');
@@ -792,24 +878,27 @@
             lucide.createIcons();
         }
 
+        // Lógica Avançada de Acessibilidade (Focus Trap)
         function setupFocusTrap(modal) {
+            // Seleciona todos os elementos focáveis dentro do modal
             const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
             if (focusableElements.length === 0) return;
 
             const firstElement = focusableElements[0];
             const lastElement = focusableElements[focusableElements.length - 1];
 
+            // Foca no primeiro botão (Fechar)
             firstElement.focus();
 
             trapFocusListener = function(e) {
                 if (e.key !== 'Tab') return;
 
-                if (e.shiftKey) { 
+                if (e.shiftKey) { // Se Shift + Tab
                     if (document.activeElement === firstElement) {
                         lastElement.focus();
                         e.preventDefault();
                     }
-                } else { 
+                } else { // Apenas Tab
                     if (document.activeElement === lastElement) {
                         firstElement.focus();
                         e.preventDefault();
@@ -819,6 +908,7 @@
 
             modal.addEventListener('keydown', trapFocusListener);
             
+            // Permite fechar com a tecla ESC
             modal.addEventListener('keydown', function escListener(e) {
                 if(e.key === 'Escape') {
                     closeGalleryModal();
@@ -838,6 +928,7 @@
             
             setTimeout(() => {
                 modal.classList.add('hidden');
+                // Devolve o foco ao cartão que abriu o modal
                 if (lastFocusedElement) {
                     lastFocusedElement.focus();
                 }
@@ -856,8 +947,8 @@
                 q: "Pergunta 1/3: Qual é o seu principal foco ao usar o computador?",
                 opts: [
                     { t: "Jogos e Lançamentos", icon: "gamepad-2", os: "windows", color: "blue" },
-                    { t: "Programação/Servidores", icon: "code", os: "linux", color: "orange" },
-                    { t: "Edição de Imagem/Vídeo", icon: "pen-tool", os: "mac", color: "slate" }
+                    { t: "Programação e Servidores", icon: "code", os: "linux", color: "orange" },
+                    { t: "Design e Edição de Vídeo", icon: "pen-tool", os: "mac", color: "slate" }
                 ]
             },
             {
@@ -871,8 +962,8 @@
             {
                 q: "Pergunta 3/3: O que faz se o PC der um problema técnico?",
                 opts: [
-                    { t: "Procuro a solução em fóruns (Google)", icon: "search", os: "linux", color: "orange" },
-                    { t: "Ligo para a assistência técnica", icon: "phone-call", os: "mac", color: "slate" },
+                    { t: "Procuro a solução na Internet e fóruns", icon: "search", os: "linux", color: "orange" },
+                    { t: "Ligo para o suporte oficial ou autorizada", icon: "phone-call", os: "mac", color: "slate" },
                     { t: "Formato a máquina e instalo de novo", icon: "refresh-cw", os: "windows", color: "blue" }
                 ]
             }
@@ -893,12 +984,12 @@
         function renderQuiz() {
             if (quizStep < quizQuestions.length) {
                 const question = quizQuestions[quizStep];
-                let html = `<h3 class="text-lg sm:text-2xl font-bold mb-6 sm:mb-8">${question.q}</h3><div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">`;
+                let html = `<h3 class="text-xl sm:text-2xl font-bold mb-8">${question.q}</h3><div class="grid gap-4 sm:grid-cols-3">`;
                 
                 question.opts.forEach(opt => {
                     html += `
-                        <button onclick="answerQuiz('${opt.os}')" class="p-4 sm:p-6 border-2 border-slate-200 dark:border-slate-600 rounded-xl hover:bg-${opt.color}-50 dark:hover:bg-slate-600 hover:border-${opt.color}-500 transition-all font-bold flex flex-col items-center gap-2 sm:gap-3 outline-none focus:ring-4 focus:ring-${opt.color}-400">
-                            <i data-lucide="${opt.icon}" class="w-8 h-8 sm:w-10 sm:h-10 text-${opt.color}-500"></i> <span class="text-sm sm:text-base">${opt.t}</span>
+                        <button onclick="answerQuiz('${opt.os}')" class="p-6 border-2 border-slate-200 dark:border-slate-600 rounded-xl hover:bg-${opt.color}-50 dark:hover:bg-slate-600 hover:border-${opt.color}-500 transition-all font-bold flex flex-col items-center gap-3 outline-none focus:ring-4 focus:ring-${opt.color}-400">
+                            <i data-lucide="${opt.icon}" class="w-10 h-10 text-${opt.color}-500"></i> ${opt.t}
                         </button>
                     `;
                 });
@@ -910,13 +1001,14 @@
                 let winner = Object.keys(quizScores).reduce((a, b) => quizScores[a] > quizScores[b] ? a : b);
                 
                 let resHtml = '';
-                if(winner === 'windows') resHtml = '<i data-lucide="monitor" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-blue-500 mb-4"></i><span class="text-blue-500 text-2xl sm:text-3xl font-black">Microsoft Windows</span><br><p class="mt-4 text-sm sm:text-lg">Compatibilidade máxima com jogos e pacotes de escritório clássicos. É a escolha segura para uso corporativo e familiar.</p>';
-                if(winner === 'linux') resHtml = '<i data-lucide="cpu" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-orange-500 mb-4"></i><span class="text-orange-500 text-2xl sm:text-3xl font-black">Linux (Ubuntu / Mint)</span><br><p class="mt-4 text-sm sm:text-lg">Seguro, gratuito e com total controlo. Excelente para estudantes de TI, reviver computadores antigos e evitar vírus.</p>';
-                if(winner === 'mac') resHtml = '<i data-lucide="apple" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-slate-800 dark:text-slate-200 mb-4"></i><span class="text-slate-800 dark:text-slate-200 text-2xl sm:text-3xl font-black">Apple macOS</span><br><p class="mt-4 text-sm sm:text-lg">Foco extremo em design, estabilidade e ecossistema integrado. Perfeito para profissionais criativos sem limite de orçamento.</p>';
+                if(winner === 'windows') resHtml = '<i data-lucide="monitor" class="w-16 h-16 mx-auto text-blue-500 mb-4"></i><span class="text-blue-500 text-3xl font-black">Microsoft Windows</span><br><p class="mt-4 text-lg">Compatibilidade máxima com jogos e pacotes de escritório clássicos. É a escolha segura para uso corporativo e familiar.</p>';
+                if(winner === 'linux') resHtml = '<i data-lucide="cpu" class="w-16 h-16 mx-auto text-orange-500 mb-4"></i><span class="text-orange-500 text-3xl font-black">Linux (Ubuntu / Mint)</span><br><p class="mt-4 text-lg">Seguro, gratuito e com total controlo. Excelente para estudantes de TI, reviver computadores antigos e evitar vírus.</p>';
+                if(winner === 'mac') resHtml = '<i data-lucide="apple" class="w-16 h-16 mx-auto text-slate-800 dark:text-slate-200 mb-4"></i><span class="text-slate-800 dark:text-slate-200 text-3xl font-black">Apple macOS</span><br><p class="mt-4 text-lg">Foco extremo em design, estabilidade e ecossistema integrado. Perfeito para profissionais criativos sem limite de orçamento.</p>';
 
-                quizContainer.innerHTML = `<div class="p-4 sm:p-8 text-center animate-fade-in">${resHtml} <br><button onclick="startQuiz()" class="mt-6 sm:mt-8 px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition w-full sm:w-auto">Refazer o Teste</button></div>`;
+                quizContainer.innerHTML = `<div class="p-8 text-center animate-fade-in">${resHtml} <br><button onclick="startQuiz()" class="mt-8 px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition">Refazer o Teste</button></div>`;
                 lucide.createIcons();
                 
+                // Dispara os confettis apenas se o utilizador não tiver restrições de movimento
                 if(typeof confetti === 'function' && !prefersReducedMotion()) {
                     confetti({ particleCount: 150, spread: 90, origin: {y: 0.6} });
                 }
@@ -935,8 +1027,74 @@
         }
 
         // ==========================================
-        // 5. SIMULADOR DE TERMINAL (LINUX vs WINDOWS)
+        // 5. SIMULADOR DE DESKTOP E TERMINAL (TRÍPLICE)
         // ==========================================
+        
+        // -- DESKTOP SIMULATOR --
+        const desktopData = {
+            'win': {
+                bg: 'radial-gradient(circle at bottom, #0078d4 0%, #001e36 100%)',
+                taskbar: 'background: rgba(255,255,255,0.7); justify-content: center; height: 48px; width: 100%; bottom: 0; left: 0; flex-direction: row; border-top: 1px solid rgba(255,255,255,0.5); border-right: none;',
+                icons: [
+                    '<i data-lucide="layout-grid" class="text-blue-600 w-6 h-6 mx-2 cursor-pointer hover:scale-110 transition"></i>', 
+                    '<i data-lucide="search" class="text-slate-600 w-6 h-6 mx-2 cursor-pointer hover:scale-110 transition"></i>', 
+                    '<i data-lucide="folder" class="text-yellow-500 w-6 h-6 mx-2 cursor-pointer hover:scale-110 transition"></i>', 
+                    '<i data-lucide="chrome" class="text-red-500 w-6 h-6 mx-2 cursor-pointer hover:scale-110 transition"></i>'
+                ]
+            },
+            'ubuntu': {
+                bg: 'linear-gradient(45deg, #4e1a3d 0%, #2c001e 100%)',
+                taskbar: 'background: rgba(0,0,0,0.6); flex-direction: column; width: 56px; height: 100%; top: 0; left: 0; justify-content: flex-start; padding-top: 20px; border-right: 1px solid rgba(255,255,255,0.1); border-top: none;',
+                icons: [
+                    '<i data-lucide="layout-dashboard" class="text-orange-500 w-7 h-7 mb-4 cursor-pointer hover:scale-110 transition"></i>', 
+                    '<i data-lucide="compass" class="text-orange-400 w-7 h-7 mb-4 cursor-pointer hover:scale-110 transition"></i>', 
+                    '<i data-lucide="folder-closed" class="text-orange-300 w-7 h-7 mb-4 cursor-pointer hover:scale-110 transition"></i>', 
+                    '<i data-lucide="terminal" class="text-slate-300 w-7 h-7 mb-4 cursor-pointer hover:scale-110 transition"></i>'
+                ]
+            },
+            'macos': {
+                bg: 'url("https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=1000&auto=format&fit=crop")',
+                taskbar: 'background: rgba(255,255,255,0.3); backdrop-filter: blur(16px); width: fit-content; min-width: 250px; left: 50%; transform: translateX(-50%); bottom: 10px; border-radius: 20px; justify-content: center; height: 60px; padding: 0 20px; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 10px 25px rgba(0,0,0,0.2); flex-direction: row; border-right: 1px solid rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.4);',
+                icons: [
+                    '<div class="w-10 h-10 mx-1.5 bg-white rounded-xl flex items-center justify-center shadow-sm cursor-pointer hover:-translate-y-2 transition"><i data-lucide="compass" class="text-blue-500 w-7 h-7"></i></div>', 
+                    '<div class="w-10 h-10 mx-1.5 bg-white rounded-xl flex items-center justify-center shadow-sm cursor-pointer hover:-translate-y-2 transition"><i data-lucide="message-circle" class="text-green-500 w-7 h-7"></i></div>', 
+                    '<div class="w-10 h-10 mx-1.5 bg-white rounded-xl flex items-center justify-center shadow-sm cursor-pointer hover:-translate-y-2 transition"><i data-lucide="music" class="text-pink-500 w-7 h-7"></i></div>', 
+                    '<div class="w-10 h-10 mx-1.5 bg-slate-800 rounded-xl flex items-center justify-center shadow-sm cursor-pointer hover:-translate-y-2 transition"><i data-lucide="terminal" class="text-white w-6 h-6"></i></div>'
+                ]
+            },
+            'mint': {
+                bg: 'linear-gradient(to bottom, #2f3e2f, #1a1a1a)',
+                taskbar: 'background: #2b2b2b; justify-content: flex-start; height: 40px; width: 100%; bottom: 0; left: 0; flex-direction: row; border-top: 1px solid #111; border-right: none;',
+                icons: [
+                    '<i data-lucide="leaf" class="text-green-500 w-6 h-6 mr-4 ml-2 cursor-pointer hover:text-white transition"></i>', 
+                    '<i data-lucide="folder" class="text-slate-300 w-5 h-5 mr-4 cursor-pointer hover:text-white transition"></i>', 
+                    '<i data-lucide="terminal" class="text-slate-300 w-5 h-5 mr-4 cursor-pointer hover:text-white transition"></i>', 
+                    '<i data-lucide="globe" class="text-slate-300 w-5 h-5 mr-4 cursor-pointer hover:text-white transition"></i>'
+                ]
+            }
+        };
+
+        function changeDesktopOS(os) {
+            const display = document.getElementById('desktopDisplay');
+            const taskbar = document.getElementById('taskbar');
+            const data = desktopData[os];
+            
+            display.style.background = data.bg;
+            display.style.backgroundSize = 'cover';
+            display.style.backgroundPosition = 'center';
+            
+            taskbar.style.cssText = data.taskbar;
+            taskbar.innerHTML = data.icons.join('');
+            
+            lucide.createIcons();
+        }
+
+        // Inicializar com o desktop do Windows por predefinição
+        window.addEventListener('DOMContentLoaded', () => {
+            changeDesktopOS('win');
+        });
+
+        // -- TERMINAL SIMULATOR --
         let currentOS = 'linux';
         const termOutput = document.getElementById('term-output');
         const termInput = document.getElementById('term-input');
@@ -944,14 +1102,24 @@
         
         function switchTerminal(os) {
             currentOS = os;
-            document.getElementById('tab-linux').className = `flex-1 py-3 px-2 sm:px-4 text-center font-bold transition outline-none ${os==='linux'?'bg-slate-700 text-white border-t-2 border-orange-500':'text-slate-400 hover:bg-slate-700 hover:text-white'}`;
-            document.getElementById('tab-win').className = `flex-1 py-3 px-2 sm:px-4 text-center font-bold transition outline-none ${os==='windows'?'bg-slate-700 text-white border-t-2 border-blue-500':'text-slate-400 hover:bg-slate-700 hover:text-white'}`;
+            document.getElementById('tab-linux').className = `flex-1 min-w-[120px] py-3 px-2 sm:px-4 text-center font-bold transition outline-none ${os==='linux'?'bg-slate-700 text-white border-t-2 border-orange-500':'text-slate-400 hover:bg-slate-700 hover:text-white'}`;
+            document.getElementById('tab-win').className = `flex-1 min-w-[120px] py-3 px-2 sm:px-4 text-center font-bold transition outline-none ${os==='windows'?'bg-slate-700 text-white border-t-2 border-blue-500':'text-slate-400 hover:bg-slate-700 hover:text-white'}`;
+            document.getElementById('tab-macos').className = `flex-1 min-w-[120px] py-3 px-2 sm:px-4 text-center font-bold transition outline-none ${os==='macos'?'bg-slate-700 text-white border-t-2 border-slate-300':'text-slate-400 hover:bg-slate-700 hover:text-white'}`;
             
-            termOutput.innerHTML = os === 'linux' ? 
-                `<div>Welcome to Ubuntu 22.04 LTS.</div><div class="text-slate-400 text-xs mb-4">Simulador Didático TCC. Tente digitar <b>ls</b>, <b>ifconfig</b> ou <b>help</b>.</div>` : 
-                `<div>Microsoft Windows [Version 10.0.19045]</div><div class="text-slate-400 text-xs mb-4">(c) Microsoft Corporation. Tente digitar <b>dir</b>, <b>ipconfig</b> ou <b>help</b>.</div>`;
+            if (os === 'linux') {
+                termOutput.innerHTML = `<div>Welcome to Ubuntu 22.04 LTS (GNU/Linux).</div><div class="text-slate-400 text-xs mb-4">Simulador Didático TCC. Tente digitar <b>ls</b>, <b>ifconfig</b> ou <b>help</b>.</div>`;
+                termPrompt.innerText = "admin@ubuntu:~$";
+                termPrompt.className = "text-green-400 font-bold mr-2 whitespace-nowrap";
+            } else if (os === 'windows') {
+                termOutput.innerHTML = `<div>Microsoft Windows [Version 10.0.19045]</div><div class="text-slate-400 text-xs mb-4">(c) Microsoft Corporation. Tente digitar <b>dir</b>, <b>ipconfig</b> ou <b>help</b>.</div>`;
+                termPrompt.innerText = "C:\\Users\\Admin>";
+                termPrompt.className = "text-slate-300 font-bold mr-2 whitespace-nowrap";
+            } else if (os === 'macos') {
+                termOutput.innerHTML = `<div>Last login: ${new Date().toDateString()} on console</div><div class="text-slate-400 text-xs mb-4">macOS Terminal (zsh). Tente digitar <b>ls -la</b>, <b>pwd</b> ou <b>help</b>.</div>`;
+                termPrompt.innerText = "admin@MacBook-Pro ~ %";
+                termPrompt.className = "text-blue-400 font-bold mr-2 whitespace-nowrap";
+            }
             
-            termPrompt.innerText = os === 'linux' ? "admin@ubuntu:~$" : "C:\\Users\\Admin>";
             termInput.value = '';
             termInput.focus();
         }
@@ -961,9 +1129,12 @@
                 const cmdOriginal = termInput.value;
                 const cmd = cmdOriginal.trim().toLowerCase();
                 termInput.value = '';
-                termOutput.innerHTML += `<div><span class="text-slate-400">${termPrompt.innerText}</span> ${cmdOriginal}</div>`;
+                termOutput.innerHTML += `<div><span class="${termPrompt.className}">${termPrompt.innerText}</span> ${cmdOriginal}</div>`;
                 
-                if(cmd === '') return;
+                if(cmd === '') {
+                    termOutput.scrollTop = termOutput.scrollHeight;
+                    return;
+                }
                 
                 let res = '';
                 if(currentOS === 'linux') {
@@ -977,7 +1148,8 @@
                     else if(cmd.startsWith('ping ')) res = `PING ${cmdOriginal.substring(5)} (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=14.2 ms`;
                     else if(cmd.startsWith('echo ')) res = cmdOriginal.substring(5);
                     else res = `bash: ${cmd}: command not found`;
-                } else {
+                } 
+                else if(currentOS === 'windows') {
                     if(cmd==='help') res = "Comandos: dir, cd, mkdir, cls, echo, whoami, ipconfig, ping";
                     else if(cmd==='dir') res = " Volume in drive C has no label.\n Directory of C:\\Users\\Admin\n\n10/05/2023  14:30    <DIR>          Documentos\n12/05/2023  09:15                45 tcc_final.txt";
                     else if(cmd.startsWith('cd ')) res = "";
@@ -987,6 +1159,19 @@
                     else if(cmd.startsWith('ping ')) res = `Pinging ${cmdOriginal.substring(5)} with 32 bytes of data:\nReply from ${cmdOriginal.substring(5)}: bytes=32 time=14ms TTL=117`;
                     else if(cmd.startsWith('echo ')) res = cmdOriginal.substring(5);
                     else res = `'${cmd}' is not recognized as an internal or external command.`;
+                }
+                else if(currentOS === 'macos') {
+                    if(cmd==='help') res = "Comandos: ls, ls -la, pwd, cd, clear, echo, whoami, ifconfig, ping";
+                    else if(cmd==='ls') res = 'Desktop   Documents   Downloads   Library   Movies   Music   Pictures   Public';
+                    else if(cmd==='ls -la' || cmd==='ls -l') res = 'drwx------+ 15 admin  staff   480 May 10 14:30 Desktop\ndrwx------+ 10 admin  staff   320 May 12 09:15 Documents';
+                    else if(cmd.startsWith('cd ')) res = "";
+                    else if(cmd==='pwd') res = "/Users/admin";
+                    else if(cmd==='clear') { termOutput.innerHTML = ''; return; }
+                    else if(cmd==='whoami') res = "admin";
+                    else if(cmd==='ifconfig') res = "en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500\n        inet 192.168.1.112 netmask 0xffffff00 broadcast 192.168.1.255";
+                    else if(cmd.startsWith('ping ')) res = `PING ${cmdOriginal.substring(5)} (8.8.8.8): 56 data bytes\n64 bytes from 8.8.8.8: icmp_seq=0 ttl=117 time=14.231 ms`;
+                    else if(cmd.startsWith('echo ')) res = cmdOriginal.substring(5);
+                    else res = `zsh: command not found: ${cmd}`;
                 }
                 
                 termOutput.innerHTML += `<div class="whitespace-pre text-slate-300 pb-2">${res}</div>`;
@@ -1002,14 +1187,14 @@
         
         function appendMsg(text, isUser) {
             const div = document.createElement('div');
-            div.className = `flex gap-2 sm:gap-3 ${isUser ? 'flex-row-reverse' : ''}`;
-            const icon = isUser ? `<i data-lucide="user" class="w-4 h-4 sm:w-5 sm:h-5"></i>` : `<i data-lucide="bot" class="w-4 h-4 sm:w-5 sm:h-5"></i>`;
+            div.className = `flex gap-3 ${isUser ? 'flex-row-reverse' : ''}`;
+            const icon = isUser ? `<i data-lucide="user" class="w-5 h-5"></i>` : `<i data-lucide="bot" class="w-5 h-5"></i>`;
             const color = isUser ? 'bg-slate-800' : 'bg-blue-600';
             const bgMsg = isUser ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-200 dark:border-indigo-700' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700';
             
             div.innerHTML = `
-                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full ${color} flex items-center justify-center text-white shrink-0 shadow-md">${icon}</div>
-                <div class="${bgMsg} p-3 sm:p-4 rounded-xl shadow-sm border text-xs sm:text-sm max-w-[85%] whitespace-pre-wrap leading-relaxed">${text}</div>
+                <div class="w-8 h-8 rounded-full ${color} flex items-center justify-center text-white shrink-0 shadow-md">${icon}</div>
+                <div class="${bgMsg} p-4 rounded-xl shadow-sm border text-sm max-w-[85%] whitespace-pre-wrap leading-relaxed">${text}</div>
             `;
             chatBox.appendChild(div);
             lucide.createIcons();
@@ -1028,7 +1213,7 @@
             
             // "Digitando..." Simulação
             const idTyping = 'typing-' + Date.now();
-            chatBox.innerHTML += `<div id="${idTyping}" class="flex gap-2 sm:gap-3"><div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0"><i data-lucide="bot" class="w-4 h-4 sm:w-5 sm:h-5"></i></div><div class="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm border text-xs sm:text-sm max-w-[85%] text-slate-400 flex items-center gap-1">A processar código<span class="animate-bounce">.</span><span class="animate-bounce" style="animation-delay: 0.1s">.</span><span class="animate-bounce" style="animation-delay: 0.2s">.</span></div></div>`;
+            chatBox.innerHTML += `<div id="${idTyping}" class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div><div class="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm border text-sm max-w-[85%] text-slate-400 flex items-center gap-1">A processar código<span class="animate-bounce">.</span><span class="animate-bounce" style="animation-delay: 0.1s">.</span><span class="animate-bounce" style="animation-delay: 0.2s">.</span></div></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
             // Lógica Exclusiva para os Prompts do TCC
