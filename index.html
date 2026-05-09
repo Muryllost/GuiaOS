@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-PT" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,17 +78,17 @@
             <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
                 <button onclick="changeFontSize(1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Aumentar texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A+</button>
                 <button onclick="changeFontSize(-1)" class="p-1 hover:text-yellow-400 focus:text-yellow-400" aria-label="Diminuir texto"><i data-lucide="a-large-small" class="w-4 h-4"></i> A-</button>
-                <button onclick="toggleDarkMode()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Modo Escuro"><i data-lucide="moon" class="w-4 h-4"></i> Dark</button>
+                <button onclick="toggleDarkMode()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alternar Modo Escuro"><i data-lucide="moon" class="w-4 h-4"></i> Escuro</button>
                 <button onclick="toggleHighContrast()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Alto Contraste"><i data-lucide="contrast" class="w-4 h-4"></i> Contraste</button>
-                <button onclick="document.querySelector('[vw-access-button]').click()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center font-bold text-blue-300" aria-label="Tradutor de Libras para Surdos"><i data-lucide="ear" class="w-4 h-4"></i> LIBRAS</button>
-                <button onclick="toggleVoiceNav()" id="btn-voice-nav" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Controle por Voz"><i data-lucide="mic" class="w-4 h-4"></i> Voz</button>
+                <button onclick="document.querySelector('[vw-access-button]').click()" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center font-bold text-blue-300" aria-label="Tradutor de LGP para Surdos"><i data-lucide="ear-off" class="w-4 h-4"></i> Sinais (Surdos)</button>
+                <button onclick="toggleVoiceNav()" id="btn-voice-nav" class="p-1 hover:text-yellow-400 focus:text-yellow-400 flex gap-1 items-center" aria-label="Controlo por Voz"><i data-lucide="mic" class="w-4 h-4"></i> Voz</button>
             </div>
         </div>
     </nav>
 
     <!-- STATUS DE VOZ -->
     <div id="voice-status" class="hidden fixed top-16 right-4 bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold shadow-lg z-50 flex items-center gap-2 animate-pulse" role="alert" aria-live="assertive">
-        <i data-lucide="mic" class="w-5 h-5"></i> Ouvindo... Diga "Página X" ou "Descer"
+        <i data-lucide="mic" class="w-5 h-5"></i> A escutar... Diga "Página X" ou "Descer"
     </div>
 
     <!-- 2. NAVEGAÇÃO PRINCIPAL (APP ROUTING) -->
@@ -110,7 +110,7 @@
         </div>
     </header>
 
-    <main role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-screen">
+    <main role="main" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-screen relative">
 
         <!-- ========================================== -->
         <!-- PÁGINA 1: INÍCIO E INTRODUÇÃO -->
@@ -124,10 +124,10 @@
                 <button onclick="nav('comparativo')" class="bg-yellow-400 text-blue-900 px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white">Ver o Comparativo Completo</button>
             </div>
 
-            <!-- Opinião dos Usuários -->
+            <!-- Opinião dos Utilizadores -->
             <section aria-labelledby="tit-depoimentos">
                 <h2 id="tit-depoimentos" class="text-3xl font-bold mb-8 text-center flex justify-center items-center gap-3">
-                    <i data-lucide="message-square-quote" class="w-8 h-8 text-emerald-500"></i> A Voz dos Usuários
+                    <i data-lucide="message-square-quote" class="w-8 h-8 text-emerald-500"></i> A Voz dos Utilizadores
                 </h2>
                 <div class="grid md:grid-cols-3 gap-6">
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border-t-4 border-blue-500">
@@ -135,10 +135,10 @@
                             <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">CF</div>
                             <div>
                                 <h4 class="font-bold">Carlos, Gamer</h4>
-                                <p class="text-xs text-slate-500">Usuário de Windows 11</p>
+                                <p class="text-xs text-slate-500">Utilizador de Windows 11</p>
                             </div>
                         </div>
-                        <p class="text-sm italic text-slate-600 dark:text-slate-300">"Não abro mão do Windows. Todos os meus jogos, do Steam ao Game Pass, funcionam de primeira. Os drivers da minha placa de vídeo atualizam sozinhos e eu não tenho dor de cabeça."</p>
+                        <p class="text-sm italic text-slate-600 dark:text-slate-300">"Não abdico do Windows. Todos os meus jogos, do Steam ao Game Pass, funcionam à primeira. Os drivers da minha placa gráfica atualizam sozinhos e não tenho dores de cabeça."</p>
                     </div>
                     
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border-t-4 border-orange-500">
@@ -146,10 +146,10 @@
                             <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold">JD</div>
                             <div>
                                 <h4 class="font-bold">Juliana, Dev Back-end</h4>
-                                <p class="text-xs text-slate-500">Usuária de Ubuntu Linux</p>
+                                <p class="text-xs text-slate-500">Utilizadora de Ubuntu Linux</p>
                             </div>
                         </div>
-                        <p class="text-sm italic text-slate-600 dark:text-slate-300">"No trabalho, o Linux é imbatível. O terminal é poderoso e meu ambiente de programação é idêntico aos servidores onde rodo meus sites. Fora que é 100% gratuito e super seguro."</p>
+                        <p class="text-sm italic text-slate-600 dark:text-slate-300">"No trabalho, o Linux é imbatível. O terminal é poderoso e o meu ambiente de programação é idêntico aos servidores onde rodo os meus sites. Além disso, é 100% gratuito e super seguro."</p>
                     </div>
 
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border-t-4 border-slate-500">
@@ -157,10 +157,10 @@
                             <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold">MM</div>
                             <div>
                                 <h4 class="font-bold">Marcos, Designer</h4>
-                                <p class="text-xs text-slate-500">Usuário de macOS</p>
+                                <p class="text-xs text-slate-500">Utilizador de macOS</p>
                             </div>
                         </div>
-                        <p class="text-sm italic text-slate-600 dark:text-slate-300">"A fluidez da Apple é mágica. As cores da tela, a integração com o celular e os programas da Adobe rodando lisos justificam o investimento alto num Mac para o meu estúdio."</p>
+                        <p class="text-sm italic text-slate-600 dark:text-slate-300">"A fluidez da Apple é mágica. As cores do ecrã, a integração com o telemóvel e os programas da Adobe a correr de forma lisa justificam o alto investimento num Mac para o meu estúdio."</p>
                     </div>
                 </div>
             </section>
@@ -175,13 +175,13 @@
                         <div class="flip-card-inner">
                             <div class="flip-card-front card">
                                 <i data-lucide="terminal" class="w-12 h-12 text-slate-400 mb-4"></i>
-                                <h3 class="font-bold text-xl text-center">"Linux é só uma tela preta difícil."</h3>
+                                <h3 class="font-bold text-xl text-center">"Linux é só um ecrã preto difícil."</h3>
                                 <span class="mt-4 text-sm text-blue-500 font-bold">Clique para revelar</span>
                             </div>
                             <div class="flip-card-back">
                                 <i data-lucide="check-circle" class="w-12 h-12 text-green-300 mb-4"></i>
                                 <h3 class="font-bold text-xl text-center">MITO!</h3>
-                                <p class="mt-2 text-sm text-center">Sistemas modernos como Linux Mint possuem interfaces lindas, idênticas ao Windows. Você usa o mouse para tudo!</p>
+                                <p class="mt-2 text-sm text-center">Sistemas modernos como o Linux Mint possuem interfaces lindas, idênticas ao Windows. Utiliza-se o rato para tudo!</p>
                             </div>
                         </div>
                     </button>
@@ -189,13 +189,13 @@
                         <div class="flip-card-inner">
                             <div class="flip-card-front card">
                                 <i data-lucide="shield-alert" class="w-12 h-12 text-slate-400 mb-4"></i>
-                                <h3 class="font-bold text-xl text-center">"Mac e Linux nunca pegam vírus."</h3>
+                                <h3 class="font-bold text-xl text-center">"Mac e Linux nunca apanham vírus."</h3>
                                 <span class="mt-4 text-sm text-blue-500 font-bold">Clique para revelar</span>
                             </div>
                             <div class="flip-card-back">
                                 <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-300 mb-4"></i>
                                 <h3 class="font-bold text-xl text-center">MITO!</h3>
-                                <p class="mt-2 text-sm text-center">Eles pegam sim. Mas como a maioria das pessoas usa Windows em casa, os hackers criam 99% dos vírus para o Windows.</p>
+                                <p class="mt-2 text-sm text-center">Eles apanham sim. Mas como a maioria das pessoas utiliza Windows em casa, os hackers criam 99% dos vírus especificamente para o Windows.</p>
                             </div>
                         </div>
                     </button>
@@ -203,13 +203,13 @@
                         <div class="flip-card-inner">
                             <div class="flip-card-front card">
                                 <i data-lucide="frown" class="w-12 h-12 text-slate-400 mb-4"></i>
-                                <h3 class="font-bold text-xl text-center">"Se é gratuito (Livre), deve ser ruim."</h3>
+                                <h3 class="font-bold text-xl text-center">"Se é gratuito (Livre), deve ser mau."</h3>
                                 <span class="mt-4 text-sm text-blue-500 font-bold">Clique para revelar</span>
                             </div>
                             <div class="flip-card-back">
                                 <i data-lucide="globe" class="w-12 h-12 text-green-300 mb-4"></i>
                                 <h3 class="font-bold text-xl text-center">MITO!</h3>
-                                <p class="mt-2 text-sm text-center">A NASA, a Netflix, o Google e o Android no seu bolso rodam em Linux. O software livre domina os servidores mundiais.</p>
+                                <p class="mt-2 text-sm text-center">A NASA, a Netflix, a Google e o Android no seu bolso rodam em Linux. O software livre domina os servidores mundiais.</p>
                             </div>
                         </div>
                     </button>
@@ -219,7 +219,7 @@
             <!-- Quiz Interativo Multipassos -->
             <section class="bg-indigo-50 dark:bg-slate-800 p-8 rounded-3xl text-center shadow-inner">
                 <h2 class="text-3xl font-bold mb-4">O Novo Teste do "Chapéu Seletor"</h2>
-                <p class="mb-8">Responda 3 perguntas rápidas e descobriremos o seu Sistema Operacional ideal!</p>
+                <p class="mb-8">Responda a 3 perguntas rápidas e descobriremos o seu Sistema Operacional ideal!</p>
                 <div id="quiz-container" aria-live="polite" class="bg-white dark:bg-slate-700 p-6 sm:p-10 rounded-2xl shadow-xl border border-indigo-100 dark:border-slate-600 max-w-3xl mx-auto transition-all">
                     <!-- O Quiz será renderizado aqui pelo JS -->
                 </div>
@@ -273,7 +273,7 @@
                 <i data-lucide="calculator" class="w-64 h-64 absolute -top-10 -right-10 opacity-10"></i>
                 <div class="relative z-10">
                     <h2 class="text-3xl font-bold mb-4 flex justify-center items-center gap-3"><i data-lucide="piggy-bank" class="text-yellow-400"></i> Calculadora de Impacto Financeiro</h2>
-                    <p class="mb-6 max-w-2xl mx-auto">Quanto uma empresa economiza em 3 anos usando Linux (Livre) em vez de comprar licenças do Windows + Antivírus (Média R$ 1.450/máquina)?</p>
+                    <p class="mb-6 max-w-2xl mx-auto">Quanto uma empresa economiza em 3 anos usando Linux (Livre) em vez de comprar licenças do Windows + Antivírus (Média de 1.450€ / máquina)?</p>
                     <div class="bg-black/20 p-6 rounded-xl inline-block backdrop-blur-sm border border-emerald-600">
                         <label class="block font-bold mb-3">Número de Computadores:</label>
                         <div class="flex gap-2">
@@ -287,11 +287,11 @@
 
             <!-- Veredito -->
             <section class="bg-blue-50 dark:bg-slate-800 p-8 rounded-3xl">
-                <h2 class="text-3xl font-bold mb-8 text-center"><i data-lucide="gavel" class="inline w-8 h-8 text-blue-600"></i> Veredito Acadêmico</h2>
+                <h2 class="text-3xl font-bold mb-8 text-center"><i data-lucide="gavel" class="inline w-8 h-8 text-blue-600"></i> Veredito Académico</h2>
                 <div class="grid md:grid-cols-3 gap-6">
                     <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
                         <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300">Para uso Doméstico?</h3>
-                        <p class="text-sm">O <strong>Windows</strong> é o rei da compatibilidade para jogos e softwares comuns. Mas o <strong>ChromeOS</strong> e <strong>Mint</strong> são perfeitos e gratuitos para ressuscitar computadores antigos onde o Windows trava.</p>
+                        <p class="text-sm">O <strong>Windows</strong> é o rei da compatibilidade para jogos e softwares comuns. Mas o <strong>ChromeOS</strong> e <strong>Mint</strong> são perfeitos e gratuitos para ressuscitar computadores antigos onde o Windows é lento.</p>
                     </div>
                     <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
                         <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300">Para Empresas e Servidores?</h3>
@@ -299,7 +299,7 @@
                     </div>
                     <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow border border-blue-100 dark:border-slate-600">
                         <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300">Sistemas Livres podem substituir?</h3>
-                        <p class="text-sm">Sim, e devem! Em governos, escolas e para desenvolvedores de software, o uso do Linux poupa milhões em dinheiro público e oferece o mesmo nível (ou superior) de qualidade.</p>
+                        <p class="text-sm">Sim, e devem! Em governos, escolas e para programadores, o uso de Linux poupa milhões em dinheiro público e oferece o mesmo nível (ou superior) de qualidade.</p>
                     </div>
                 </div>
             </section>
@@ -311,43 +311,58 @@
         <div id="page-galeria" class="page-section space-y-10">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold mb-4"><i data-lucide="image" class="inline w-8 h-8 text-blue-600"></i> Galeria de Interfaces</h2>
-                <p>Veja como o mito da "tela preta cheia de códigos" ficou no passado.</p>
+                <p>Veja como o mito do "ecrã preto cheio de códigos" ficou no passado. Clique nos quadros para mais detalhes.</p>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Imagem Windows -->
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg transition">
+                <div role="button" tabindex="0" onclick="openGalleryModal('windows')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-blue-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="monitor" class="text-blue-500"></i> Windows 11 (Pago)</h3>
-                    <img src="https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de tela do Windows 11" class="rounded-lg w-full h-48 object-cover">
+                    <img src="https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de ecrã do Windows 11" class="rounded-lg w-full h-48 object-cover">
                     <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">Interface clássica e padrão do mercado. Focada em uso familiar.</p>
                 </div>
                 
                 <!-- Imagem Linux Ubuntu -->
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg transition">
+                <div role="button" tabindex="0" onclick="openGalleryModal('ubuntu')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-orange-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="layout-dashboard" class="text-orange-500"></i> Ubuntu (Livre)</h3>
-                    <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de tela de um ambiente Linux moderno" class="rounded-lg w-full h-48 object-cover">
-                    <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">Interface GNOME, fluida, segura e super customizável. Favorita de devs.</p>
+                    <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de ecrã de um ambiente Linux moderno" class="rounded-lg w-full h-48 object-cover">
+                    <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">Interface GNOME, fluida, segura e super personalizável. A favorita dos devs.</p>
                 </div>
                 
                 <!-- Imagem macOS -->
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg transition">
+                <div role="button" tabindex="0" onclick="openGalleryModal('macos')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-slate-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="apple" class="text-slate-700 dark:text-slate-200"></i> macOS (Pago/Proprietário)</h3>
-                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de tela do macOS da Apple" class="rounded-lg w-full h-48 object-cover">
+                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Captura de ecrã do macOS da Apple" class="rounded-lg w-full h-48 object-cover">
                     <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">Exclusiva da Apple. Foco extremo em design, animações fluidas e estabilidade.</p>
                 </div>
 
                 <!-- Imagem Linux Mint -->
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg transition">
+                <div role="button" tabindex="0" onclick="openGalleryModal('mint')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-green-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="leaf" class="text-green-500"></i> Linux Mint (Livre)</h3>
                     <img src="https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80" alt="Ambiente de desenvolvimento limpo representando o Linux Mint" class="rounded-lg w-full h-48 object-cover">
-                    <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">A porta de entrada ideal. O design (Cinnamon) simula o menu iniciar do Windows 7/10.</p>
+                    <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">A porta de entrada ideal. O design (Cinnamon) simula o menu iniciar do Windows.</p>
                 </div>
 
                 <!-- Imagem ChromeOS -->
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg transition">
+                <div role="button" tabindex="0" onclick="openGalleryModal('chromeos')" onkeypress="if(event.key==='Enter') this.click()" class="cursor-pointer bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition transform outline-none focus-visible:ring-4 focus-visible:ring-yellow-400">
                     <h3 class="font-bold mb-2 flex items-center gap-2"><i data-lucide="chrome" class="text-yellow-500"></i> ChromeOS Flex (Proprietário)</h3>
                     <img src="https://images.unsplash.com/photo-1589739900266-43b2843f4c12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Notebook básico representando ChromeOS" class="rounded-lg w-full h-48 object-cover">
-                    <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">Voltado 100% para internet. Revive notebooks antigos perfeitamente em escolas.</p>
+                    <p class="text-sm mt-3 text-slate-600 dark:text-slate-400">Voltado 100% para internet. Revive portáteis antigos perfeitamente em escolas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DA GALERIA -->
+        <div id="gallery-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 relative" onclick="event.stopPropagation()">
+                <button onclick="closeGalleryModal()" class="absolute top-4 right-4 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition z-10 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Fechar Modal">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <img id="modal-img" src="" alt="Imagem do Sistema" class="w-full h-48 sm:h-64 object-cover">
+                <div class="p-6 md:p-8">
+                    <h3 id="modal-title" class="text-2xl font-black text-slate-800 dark:text-white mb-3 flex items-center gap-3"></h3>
+                    <div id="modal-badges" class="flex flex-wrap gap-2 mb-4"></div>
+                    <p id="modal-desc" class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base"></p>
                 </div>
             </div>
         </div>
@@ -388,21 +403,21 @@
                 <div class="bg-orange-950/20 dark:bg-slate-800 border border-orange-200 dark:border-slate-700 p-5 rounded-xl shadow-sm">
                     <h3 class="font-bold text-orange-600 dark:text-orange-400 mb-3 flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> Comandos Linux</h3>
                     <ul class="text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300">
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ls</code> : Listar arquivos</li>
+                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ls</code> : Listar ficheiros</li>
                         <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">pwd</code> : Mostrar pasta atual</li>
                         <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">ifconfig</code> : Dados de rede/IP</li>
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">whoami</code> : Usuário logado</li>
-                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">clear</code> : Limpar tela</li>
+                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">whoami</code> : Utilizador ligado</li>
+                        <li><code class="bg-orange-100 dark:bg-slate-900 px-1 py-0.5 rounded text-orange-700 dark:text-orange-300 font-bold">clear</code> : Limpar ecrã</li>
                     </ul>
                 </div>
                 <div class="bg-blue-950/10 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 p-5 rounded-xl shadow-sm">
                     <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2"><i data-lucide="monitor" class="w-4 h-4"></i> Comandos Windows</h3>
                     <ul class="text-sm font-mono space-y-2 text-slate-700 dark:text-slate-300">
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">dir</code> : Listar arquivos</li>
+                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">dir</code> : Listar ficheiros</li>
                         <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cd</code> : Mostrar pasta atual</li>
                         <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">ipconfig</code> : Dados de rede/IP</li>
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">whoami</code> : Usuário logado</li>
-                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cls</code> : Limpar tela</li>
+                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">whoami</code> : Utilizador ligado</li>
+                        <li><code class="bg-blue-100 dark:bg-slate-900 px-1 py-0.5 rounded text-blue-700 dark:text-blue-300 font-bold">cls</code> : Limpar ecrã</li>
                     </ul>
                 </div>
             </div>
@@ -413,8 +428,8 @@
         <!-- ========================================== -->
         <div id="page-ia" class="page-section">
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold mb-4"><i data-lucide="bot" class="inline w-8 h-8 text-blue-600"></i> Simulador de Prompt IA Avançado</h2>
-                <p>Interaja com o assistente simulado! Ele está programado para analisar e responder a <strong>qualquer pergunta</strong> sobre Sistemas Operacionais.</p>
+                <h2 class="text-3xl font-bold mb-4"><i data-lucide="bot" class="inline w-8 h-8 text-blue-600"></i> O Assistente "Revelador de Código"</h2>
+                <p>Nesta demonstração, a IA responde <strong>exclusivamente</strong> aos prompts do TCC, explicando como cada parte do site foi programada.</p>
             </div>
 
             <div class="max-w-4xl mx-auto flex flex-col h-[550px] border border-slate-300 dark:border-slate-700 rounded-xl shadow-lg bg-white dark:bg-slate-800 overflow-hidden mb-12">
@@ -423,19 +438,19 @@
                     <div class="flex gap-3">
                         <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
                         <div class="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 text-sm max-w-[85%] leading-relaxed">
-                            Olá! Sou a IA Assistente Oficial do seu TCC. <br><br>Você pode me perguntar o que quiser sobre Windows, Linux, Mac, custos, acessibilidade, qual o melhor sistema para programar, jogos, vírus... Vamos testar?
+                            Olá! Sou a IA Assistente do TCC. Clique numa das sugestões de prompt abaixo ou digite os comandos do relatório para eu explicar como gerei o código do site.
                         </div>
                     </div>
                 </div>
                 <!-- Input Area -->
                 <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
                     <div class="flex flex-wrap gap-2 mb-3">
-                        <button onclick="enviarChat('Qual é o melhor sistema para quem quer ser programador?')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition">Programação</button>
-                        <button onclick="enviarChat('Por que os Macs não pegam tanto vírus?')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition">Vírus/Mac</button>
-                        <button onclick="enviarChat('Quero jogar os lançamentos. Qual eu uso?')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition">Jogos</button>
+                        <button onclick="enviarChat('Atue como um especialista em acessibilidade web. Gere a estrutura HTML garantindo suporte a leitores de tela e controle por teclado.')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition truncate max-w-[200px]">Acessibilidade HTML</button>
+                        <button onclick="enviarChat('Crie um quiz interativo multipassos (\'Teste do Chapéu Seletor\') com JS para indicar o melhor Sistema Operacional com base no perfil do usuário leigo.')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition truncate max-w-[200px]">Quiz Interativo JS</button>
+                        <button onclick="enviarChat('Escreva uma Calculadora de Economia em JavaScript que mostre o custo corporativo de licenças do Windows vs Linux ao longo de 3 anos.')" class="text-xs font-semibold bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-slate-600 transition truncate max-w-[200px]">Calculadora de Custos</button>
                     </div>
                     <form onsubmit="handleChatSubmit(event)" class="flex gap-2">
-                        <input type="text" id="chat-input" placeholder="Faça qualquer pergunta sobre Sistemas Operacionais..." class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                        <input type="text" id="chat-input" placeholder="Cole um dos prompts utilizados no TCC aqui..." class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" required>
                         <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition font-bold flex items-center gap-2"><span class="hidden sm:inline">Enviar</span> <i data-lucide="send" class="w-4 h-4"></i></button>
                     </form>
                 </div>
@@ -459,7 +474,7 @@
         <p class="text-sm mt-2 text-yellow-500 flex justify-center items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Padrão de Acessibilidade Extrema WCAG AAA Aplicado.</p>
     </footer>
 
-    <!-- VLibras Widget (O script cria a âncora automaticamente) -->
+    <!-- VLibras Widget -->
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
@@ -491,11 +506,11 @@
         // 2. DADOS: TABELA COMPARATIVA E PROMPTS
         // ==========================================
         const criterios = [
-            { c: "Licença / Preço", livre: "🟢 100% Gratuito. A 'receita' é aberta.", pago: "🔴 Exige compra de licença cara ou assinatura." },
-            { c: "Segurança", livre: "🟢 Muito seguro. Falhas são achadas e corrigidas rápido.", pago: "🔴 Alvo principal de Hackers e vírus mundialmente." },
-            { c: "Uso em PCs Antigos", livre: "🟢 Salvam máquinas velhas. Gastam pouca RAM e CPU.", pago: "🔴 Pesados, exigem PCs modernos e caros." },
-            { c: "Softwares Profissionais", livre: "🟡 Tem alternativas grátis (GIMP, LibreOffice), mas não roda Adobe oficial.", pago: "🟢 Padrão da indústria criativa. Roda tudo." },
-            { c: "Drivers (Impressoras)", livre: "🟡 Placas muito recentes podem dar dor de cabeça no início.", pago: "🟢 Suporte total pelas fabricantes. Plug and play." }
+            { c: "Licença / Preço", livre: "🟢 100% Gratuito. A 'receita' é aberta.", pago: "🔴 Exige compra de licença dispendiosa ou assinatura." },
+            { c: "Segurança", livre: "🟢 Muito seguro. Falhas são detetadas e corrigidas rápido.", pago: "🔴 Alvo principal de Hackers e vírus a nível mundial." },
+            { c: "Uso em PCs Antigos", livre: "🟢 Salvam máquinas antigas. Gastam pouca RAM e CPU.", pago: "🔴 Pesados, exigem PCs modernos e dispendiosos." },
+            { c: "Software Profissional", livre: "🟡 Tem alternativas grátis (GIMP, LibreOffice), mas não roda Adobe oficial.", pago: "🟢 Padrão da indústria criativa. Roda tudo." },
+            { c: "Drivers (Impressoras)", livre: "🟡 Placas muito recentes podem dar algumas dores de cabeça no início.", pago: "🟢 Suporte total pelas fabricantes. Plug and play." }
         ];
         const tabBody = document.getElementById('tabela-corpo');
         criterios.forEach(item => {
@@ -508,7 +523,7 @@
             "Crie um quiz interativo multipassos ('Teste do Chapéu Seletor') com JS para indicar o melhor Sistema Operacional com base no perfil do usuário leigo.",
             "Escreva uma Calculadora de Economia em JavaScript que mostre o custo corporativo de licenças do Windows vs Linux ao longo de 3 anos.",
             "Crie uma simulação funcional de terminal duplo (Linux Ubuntu vs Windows CMD) e um 'Cheat Sheet' com os principais comandos.",
-            "Melhore o script do assistente virtual (IA) para analisar palavras-chave e responder de forma complexa sobre macOS, jogos, servidores e TCC.",
+            "Traduza a diferença entre 'Código Aberto' e 'Código Fechado' usando a metáfora de uma Cozinha de Restaurante vs Cozinha Comunitária.",
             "Adicione transições CSS puras para um Dark Mode (Modo Escuro) suave e uma SPA (Single Page Application) sem recarregar a página."
         ];
         const promptList = document.getElementById('lista-prompts');
@@ -532,7 +547,7 @@
                 window.speechSynthesis.cancel();
                 let txt = ids.map(id => document.getElementById(id)?.innerText || '').join('. ');
                 let u = new SpeechSynthesisUtterance(txt);
-                u.lang = 'pt-BR'; window.speechSynthesis.speak(u);
+                u.lang = 'pt-PT'; window.speechSynthesis.speak(u);
             }
         }
 
@@ -544,7 +559,7 @@
                 annyang.abort(); voiceActive = false;
                 document.getElementById('voice-status').classList.add('hidden');
             } else {
-                annyang.setLanguage('pt-BR');
+                annyang.setLanguage('pt-PT');
                 annyang.addCommands({
                     'descer': () => window.scrollBy(0, 400),
                     'subir': () => window.scrollBy(0, -400),
@@ -558,6 +573,80 @@
                 voiceActive = true;
                 document.getElementById('voice-status').classList.remove('hidden');
             }
+        }
+
+        // ==========================================
+        // DADOS E FUNÇÕES DO MODAL DA GALERIA
+        // ==========================================
+        const galleryData = {
+            'windows': {
+                title: 'Microsoft Windows 11',
+                icon: 'monitor',
+                img: 'https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['Pago', 'Código Fechado', 'Foco em Jogos'],
+                desc: 'O Windows 11 apresenta uma interface centralizada e limpa. É o sistema mais utilizado no mundo em computadores pessoais. A sua principal força é a compatibilidade: quase qualquer programa ou jogo feito para PC funcionará aqui. No entanto, o seu código é trancado a sete chaves (proprietário) e exige hardware cada vez mais recente e poderoso para funcionar perfeitamente.'
+            },
+            'ubuntu': {
+                title: 'Ubuntu (Linux)',
+                icon: 'layout-dashboard',
+                img: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['Gratuito', 'Código Aberto', 'Foco em Programação'],
+                desc: 'O Ubuntu utiliza uma interface moderna e intuitiva chamada GNOME. Diferente do mito do "ecrã preto", ele possui uma loja de aplicações visual fácil de usar. É a escolha de eleição dos programadores, pois oferece um ambiente de desenvolvimento idêntico ao dos servidores web (Cloud), garantindo estabilidade incrível e imunidade contra os vírus mais comuns.'
+            },
+            'macos': {
+                title: 'Apple macOS',
+                icon: 'apple',
+                img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['Pago', 'Proprietário', 'Foco em Design'],
+                desc: 'O macOS é o sistema operativo exclusivo dos computadores Mac da Apple. É amplamente reconhecido no mercado pelo seu design polido, ecossistema integrado (onde tudo funciona perfeitamente com iPhone e iPad) e estabilidade robusta. É a plataforma padrão na indústria de design gráfico, edição de vídeo e produção musical. O lado negativo é o seu custo de entrada altíssimo.'
+            },
+            'mint': {
+                title: 'Linux Mint',
+                icon: 'leaf',
+                img: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80',
+                badges: ['Gratuito', 'Código Aberto', 'Ideal para Iniciantes'],
+                desc: 'Se o utilizador quer abandonar o Windows mas não tem vontade de reaprender a usar o PC, o Linux Mint é a melhor recomendação global. A sua interface (Cinnamon) simula o comportamento clássico com um menu iniciar no canto, barra de tarefas e ícones no ambiente de trabalho. Além disso, consome pouquíssimos recursos e é formidável a reavivar portáteis lentos e antigos.'
+            },
+            'chromeos': {
+                title: 'ChromeOS Flex',
+                icon: 'chrome',
+                img: 'https://images.unsplash.com/photo-1589739900266-43b2843f4c12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['Gratuito', 'Base Linux', 'Foco Web e Estudantes'],
+                desc: 'Desenvolvido pela Google, o ChromeOS converte, basicamente, qualquer computador num "Navegador Chrome Gigante". Tendo em conta que, atualmente, a grande maioria dos estudos e trabalhos ocorre 100% na Web (Google Docs, YouTube, Redes Sociais), trata-se de um sistema incrivelmente eficaz. Tem um arranque de segundos e não exige manutenções ou antivírus complexos.'
+            }
+        };
+
+        function openGalleryModal(osKey) {
+            const data = galleryData[osKey];
+            if(!data) return;
+
+            document.getElementById('modal-img').src = data.img;
+            document.getElementById('modal-title').innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i> ${data.title}`;
+            document.getElementById('modal-desc').innerHTML = data.desc;
+            
+            const badgesHtml = data.badges.map(b => `<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-3 py-1 rounded font-bold uppercase tracking-wider">${b}</span>`).join('');
+            document.getElementById('modal-badges').innerHTML = badgesHtml;
+
+            const modal = document.getElementById('gallery-modal');
+            modal.classList.remove('hidden');
+            
+            // Permite que o ecrã desenhe o elemento como "block" antes de animar a opacidade
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.children[0].classList.remove('scale-95');
+            }, 10);
+            
+            lucide.createIcons();
+        }
+
+        function closeGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            modal.classList.add('opacity-0');
+            modal.children[0].classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
 
         // ==========================================
@@ -577,7 +666,7 @@
                 ]
             },
             {
-                q: "Pergunta 2/3: Qual o seu orçamento para licenças e softwares?",
+                q: "Pergunta 2/3: Qual o seu orçamento para licenças e software?",
                 opts: [
                     { t: "Custo Zero (Totalmente Grátis)", icon: "piggy-bank", os: "linux", color: "green" },
                     { t: "Médio (Posso pagar uma licença)", icon: "credit-card", os: "windows", color: "blue" },
@@ -585,10 +674,10 @@
                 ]
             },
             {
-                q: "Pergunta 3/3: O que você faz se o PC der um problema técnico?",
+                q: "Pergunta 3/3: O que faz se o PC der um problema técnico?",
                 opts: [
-                    { t: "Procuro a solução no Google e fóruns", icon: "search", os: "linux", color: "orange" },
-                    { t: "Chamo o suporte oficial ou autorizada", icon: "phone-call", os: "mac", color: "slate" },
+                    { t: "Procuro a solução na Internet e fóruns", icon: "search", os: "linux", color: "orange" },
+                    { t: "Ligo para o suporte oficial ou autorizada", icon: "phone-call", os: "mac", color: "slate" },
                     { t: "Formato a máquina e instalo de novo", icon: "refresh-cw", os: "windows", color: "blue" }
                 ]
             }
@@ -613,7 +702,7 @@
                 
                 question.opts.forEach(opt => {
                     html += `
-                        <button onclick="answerQuiz('${opt.os}')" class="p-6 border-2 border-slate-200 dark:border-slate-600 rounded-xl hover:bg-${opt.color}-50 dark:hover:bg-slate-600 hover:border-${opt.color}-500 transition-all font-bold flex flex-col items-center gap-3">
+                        <button onclick="answerQuiz('${opt.os}')" class="p-6 border-2 border-slate-200 dark:border-slate-600 rounded-xl hover:bg-${opt.color}-50 dark:hover:bg-slate-600 hover:border-${opt.color}-500 transition-all font-bold flex flex-col items-center gap-3 outline-none focus:ring-4 focus:ring-${opt.color}-400">
                             <i data-lucide="${opt.icon}" class="w-10 h-10 text-${opt.color}-500"></i> ${opt.t}
                         </button>
                     `;
@@ -623,12 +712,11 @@
                 quizContainer.innerHTML = html;
                 lucide.createIcons();
             } else {
-                // Cálculo Final
                 let winner = Object.keys(quizScores).reduce((a, b) => quizScores[a] > quizScores[b] ? a : b);
                 
                 let resHtml = '';
                 if(winner === 'windows') resHtml = '<i data-lucide="monitor" class="w-16 h-16 mx-auto text-blue-500 mb-4"></i><span class="text-blue-500 text-3xl font-black">Microsoft Windows</span><br><p class="mt-4 text-lg">Compatibilidade máxima com jogos e pacotes de escritório clássicos. É a escolha segura para uso corporativo e familiar.</p>';
-                if(winner === 'linux') resHtml = '<i data-lucide="cpu" class="w-16 h-16 mx-auto text-orange-500 mb-4"></i><span class="text-orange-500 text-3xl font-black">Linux (Ubuntu / Mint)</span><br><p class="mt-4 text-lg">Seguro, gratuito e com total controle. Excelente para estudantes de TI, reviver computadores antigos e evitar vírus.</p>';
+                if(winner === 'linux') resHtml = '<i data-lucide="cpu" class="w-16 h-16 mx-auto text-orange-500 mb-4"></i><span class="text-orange-500 text-3xl font-black">Linux (Ubuntu / Mint)</span><br><p class="mt-4 text-lg">Seguro, gratuito e com total controlo. Excelente para estudantes de TI, reviver computadores antigos e evitar vírus.</p>';
                 if(winner === 'mac') resHtml = '<i data-lucide="apple" class="w-16 h-16 mx-auto text-slate-800 dark:text-slate-200 mb-4"></i><span class="text-slate-800 dark:text-slate-200 text-3xl font-black">Apple macOS</span><br><p class="mt-4 text-lg">Foco extremo em design, estabilidade e ecossistema integrado. Perfeito para profissionais criativos sem limite de orçamento.</p>';
 
                 quizContainer.innerHTML = `<div class="p-8 text-center animate-fade-in">${resHtml} <br><button onclick="startQuiz()" class="mt-8 px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition">Refazer o Teste</button></div>`;
@@ -637,14 +725,13 @@
             }
         }
         
-        // Iniciar quiz ao carregar a página
         startQuiz();
 
         // Calculadora de Economia
         function calcularEconomia() {
             let num = parseInt(document.getElementById('calc-pcs').value);
             if(num > 0) {
-                document.getElementById('calc-resultado').innerText = `Economia Projetada: ${(num * 1450).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'})}`;
+                document.getElementById('calc-resultado').innerText = `Economia Projetada: ${(num * 1450).toLocaleString('pt-PT', {style: 'currency', currency:'EUR'})}`;
                 document.getElementById('calc-resultado').classList.remove('hidden');
             }
         }
@@ -663,7 +750,7 @@
             document.getElementById('tab-win').className = `flex-1 py-3 px-4 font-bold text-center transition outline-none ${os==='windows'?'bg-slate-700 text-white border-t-2 border-blue-500':'text-slate-400 hover:bg-slate-700 hover:text-white'}`;
             
             termOutput.innerHTML = os === 'linux' ? 
-                `<div>Welcome to Ubuntu 22.04 LTS.</div><div class="text-slate-400 text-xs mb-4">Simulador de TCC ativo. Tente digitar <b>ls</b>, <b>ifconfig</b> ou <b>help</b>.</div>` : 
+                `<div>Welcome to Ubuntu 22.04 LTS.</div><div class="text-slate-400 text-xs mb-4">Simulador Didático TCC. Tente digitar <b>ls</b>, <b>ifconfig</b> ou <b>help</b>.</div>` : 
                 `<div>Microsoft Windows [Version 10.0.19045]</div><div class="text-slate-400 text-xs mb-4">(c) Microsoft Corporation. Tente digitar <b>dir</b>, <b>ipconfig</b> ou <b>help</b>.</div>`;
             
             termPrompt.innerText = os === 'linux' ? "admin@ubuntu:~$" : "C:\\Users\\Admin>";
@@ -710,7 +797,7 @@
         });
 
         // ==========================================
-        // 6. PLAYGROUND IA (Simulação ChatGPT Avançada)
+        // 6. PLAYGROUND IA (Restrito aos Prompts do TCC)
         // ==========================================
         const chatBox = document.getElementById('chat-box');
         const chatInput = document.getElementById('chat-input');
@@ -743,10 +830,10 @@
             
             // "Digitando..." Simulação
             const idTyping = 'typing-' + Date.now();
-            chatBox.innerHTML += `<div id="${idTyping}" class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div><div class="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm border text-sm max-w-[85%] text-slate-400 flex items-center gap-1">Processando analiticamente<span class="animate-bounce">.</span><span class="animate-bounce" style="animation-delay: 0.1s">.</span><span class="animate-bounce" style="animation-delay: 0.2s">.</span></div></div>`;
+            chatBox.innerHTML += `<div id="${idTyping}" class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div><div class="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm border text-sm max-w-[85%] text-slate-400 flex items-center gap-1">A processar código<span class="animate-bounce">.</span><span class="animate-bounce" style="animation-delay: 0.1s">.</span><span class="animate-bounce" style="animation-delay: 0.2s">.</span></div></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Analisador Lógico da IA
+            // Lógica Exclusiva para os Prompts do TCC
             setTimeout(() => {
                 const el = document.getElementById(idTyping);
                 if(el) el.remove();
@@ -754,26 +841,22 @@
                 let resposta = "";
                 const msgLower = msg.toLowerCase();
 
-                // Dicionário de Análise de Padrões
-                if(msgLower.match(/leig|metáfora|analogia/)) {
-                    resposta = "Pense num Sistema Pago (Windows) como comer num restaurante chic: você paga a conta, a comida vem pronta na mesa, mas a cozinha está trancada.\n\nUm Sistema Livre (Linux) é como uma grande Cozinha Comunitária: todos os ingredientes são grátis, você pode cozinhar o prato como quiser, mas precisará aprender a usar as panelas!";
-                } else if(msgLower.match(/custo|tabela|dinheiro|caro|barato|preço/)) {
-                    resposta = "📊 **Resumo de Custos (Estimativa para Empresas):**\n\n🖥️ **Windows 11 Pro:** ~R$ 1.099,00 (Licença de Uso) + Antivírus\n🏢 **Windows Server:** ~R$ 5.000+ (Variável por núcleo de processamento)\n🍎 **macOS:** Requer hardware proprietário (Macs de R$ 8.000 a R$ 30.000)\n🐧 **Ubuntu / Linux Mint:** R$ 0,00 (Totalmente livre de royalties)\n\nA adoção de Código Aberto libera orçamento massivo para infraestrutura.";
-                } else if(msgLower.match(/acessibilidad|cego|surdo|voz/)) {
-                    resposta = "Como um projeto de excelência, para garantir a acessibilidade focamos em:\n\n1. **VLibras:** Widget do governo para surdos.\n2. **Alto Contraste:** Css focado em leitores daltônicos e baixa visão.\n3. **Web Speech API:** Leitura nativa de tela sem depender do NVDA.\n4. **Annyang.js:** Permitindo navegar sem as mãos, usando apenas a voz.";
-                } else if(msgLower.match(/jogo|jogar|game/)) {
-                    resposta = "🎮 Para jogos, o **Windows** ainda detém a Coroa devido à API DirectX e suporte total das fabricantes de Placa de Vídeo.\n\nO Linux evoluiu incrivelmente com o **Proton/SteamOS** (usado no Steam Deck), mas jogos competitivos com *Anti-Cheat* restrito (como Valorant) ainda bloqueiam usuários de Linux.";
-                } else if(msgLower.match(/program|dev|código|servidor/)) {
-                    resposta = "💻 Para desenvolvedores, a comunidade concorda: **Linux é imbatível**.\n\nA maioria da internet, nuvem e servidores (AWS, Google Cloud) roda em Linux. Usar o Linux no seu computador pessoal faz com que seu ambiente de desenvolvimento seja idêntico ao servidor real de produção (Deploy). Além disso, o terminal (bash/zsh) nativo é excelente.";
-                } else if(msgLower.match(/mac|apple/)) {
-                    resposta = "🍏 O **macOS** baseia-se em Unix (parente distante do Linux), porém com código fechado e foco agressivo em estabilidade comercial.\n\nÉ o sistema favorito de designers, editores de vídeo e produtores musicais por sua fluidez gráfica impecável e longevidade do hardware, apesar do altíssimo custo de entrada.";
-                } else if(msgLower.match(/vírus|segurança|hacker/)) {
-                    resposta = "🛡️ **Por que Windows pega mais vírus?**\nNão é porque o Linux ou o Mac são perfeitamente invioláveis, mas sim por Matemática: o Windows domina os PCs domésticos do planeta. É muito mais lucrativo para um hacker criar um vírus que afeta 1 bilhão de PCs do que um malware focado nos 3% de usuários de Linux.";
-                } else if(msgLower.match(/tcc|trabalho|professor/)) {
-                    resposta = "🎓 Olá, Professor e Banca Avaliadora!\n\nEste projeto foi desenvolvido utilizando a fundo conceitos de UI/UX, Acessibilidade WCAG, manipulação de estado via Vanilla JS e design responsivo com Tailwind CSS. Espero que a nota seja excelente, pois o trabalho prático justifica!";
+                if(msgLower.includes('acessibilidade web') || msgLower.includes('leitores de tela')) {
+                    resposta = "✅ **Comando Reconhecido!**\n\nPara atender a este prompt, estruturei o HTML com tags semânticas, adicionei atributos `aria-label` aos botões, configurei `aria-live` nas notificações para os leitores de ecrã, criei atalhos para Alto Contraste, tamanhos de fonte e integrei as bibliotecas VLibras (para a comunidade surda) e Annyang (para os controlos de voz).";
+                } else if(msgLower.includes('quiz interativo') || msgLower.includes('chapéu seletor')) {
+                    resposta = "✅ **Comando Reconhecido!**\n\nDesenvolvi a lógica do Quiz armazenando perguntas num Array (vetor) de Objetos. Usei variáveis de estado em JavaScript (`quizStep` e `quizScores`) para gerir as respostas e calcular qual Sistema Operacional somava mais pontos. No final, implementei o disparo de confetes virtuais usando a biblioteca `canvas-confetti`.";
+                } else if(msgLower.includes('calculadora de economia')) {
+                    resposta = "✅ **Comando Reconhecido!**\n\nImplementei a função `calcularEconomia()`. Esta função em JavaScript captura o valor introduzido (quantidade de PCs), multiplica pelo custo fixo estimado de 1.450€ (Licença Windows 11 Pro + Antivírus básico) e utiliza o método nativo `.toLocaleString('pt-PT')` para formatar e renderizar o resultado perfeitamente em Euros (€).";
+                } else if(msgLower.includes('simulação funcional de terminal') || msgLower.includes('terminal duplo')) {
+                    resposta = "✅ **Comando Reconhecido!**\n\nCriei o layout do terminal com Tailwind CSS. Em JavaScript, adicionei um escutador de eventos (`EventListener`) para a tecla 'Enter' que interceta o texto digitado. Se for Linux, emula e responde a comandos como 'ls' e 'pwd'. Se for Windows, responde a 'dir' e 'ipconfig', construindo um registo interativo no ecrã.";
+                } else if(msgLower.includes('metáfora de uma cozinha') || msgLower.includes('código aberto')) {
+                    resposta = "✅ **Comando Reconhecido!**\n\nGerei a secção 'A Metáfora da Cozinha' usando os componentes visuais do Tailwind. Criei 'Cards' interativos com ícones SVG da biblioteca Lucide para explicar a estrutura do Código Aberto de forma lúdica, permitindo que qualquer utilizador não técnico entenda a diferença.";
+                } else if(msgLower.includes('transições css puras') || msgLower.includes('spa') || msgLower.includes('dark mode') || msgLower.includes('modo escuro')) {
+                    resposta = "✅ **Comando Reconhecido!**\n\nAdicionei a classe `dark:` nas propriedades do Tailwind para ativar o modo escuro imediato. Para a navegação SPA (Single Page Application), construí a função Javascript `nav(pageId)` que gere a transição ocultando todas as secções (display: none) e exibindo apenas a secção selecionada (display: block), tudo sem recarregar o navegador.";
                 } else {
-                    resposta = `Analisando a sua entrada ("${msg}"), é interessante ressaltar que a disputa entre Sistemas Livres e Pagos sempre termina na mesma resposta de Engenharia de Software: Depende do Casos de Uso.\n\nVocê precisa de segurança e customização total sem custos? Vá de Livre (Ubuntu). Precisa de suporte imediato corporativo e pacote Adobe? Vá de Pago (Windows/Mac).\n\nQuer que eu analise algum ponto mais a fundo, como Jogos ou Programação?`;
+                    resposta = "⚠️ **Comando Não Reconhecido**\n\nDesculpe, mas como esta é uma demonstração restrita do TCC, esta Inteligência Artificial está programada para responder **apenas aos prompts exatos** utilizados pelo aluno para construir o projeto.\n\nPor favor, copie e utilize um dos prompts listados na caixa de 'Sugestões' acima ou no 'Relatório de Transparência' abaixo.";
                 }
+                
                 appendMsg(resposta, false);
             }, 1200);
         }
