@@ -1,5 +1,11 @@
 
-   
+    <!-- Inicialização de Alto Contraste via LocalStorage -->
+    <script>
+        if (localStorage.getItem('contrast') === 'high') {
+            document.body.classList.add('high-contrast');
+        }
+    </script>
+
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
